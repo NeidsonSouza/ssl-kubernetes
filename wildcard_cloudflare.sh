@@ -25,9 +25,9 @@ $CERTBOT certonly \
   --agree-tos \
   -d ${DOMAIN},*.${DOMAIN}
 
-if [ -z $FOLDER ]; then
-  echo You must copy your new certificates into your working folder like this:
-  echo cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/[PATH]/ssl/${DOMAIN}
-else
-  cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/${FOLDER}/ssl/${DOMAIN}
-fi
+# if [ -z $FOLDER ]; then
+#   echo You must copy your new certificates into your working folder like this:
+#   echo cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/[PATH]/ssl/${DOMAIN}
+# else
+#   cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/${FOLDER}/ssl/${DOMAIN}
+# fi
