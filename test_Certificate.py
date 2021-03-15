@@ -2,24 +2,26 @@ import pytest
 import os
 from classes.Certificate import Certificate
 
+repository_dir = os.path.dirname(os.path.realpath(__file__))
+
 def test_init_value_error_1_arg():
     with pytest.raises(ValueError):
-        Certificate('', 'cloudflare')
+        Certificate('', 'cloudflare', repository_dir)
 
 def test_init_value_error_2_arg():
     with pytest.raises(ValueError):
-        Certificate('my-domain.com', '')
+        Certificate('my-domain.com', '', repository_dir)
 
 def test_init_type_error_1_arg():
     with pytest.raises(TypeError):
-        Certificate(2, 'cloudflare')
+        Certificate(2, 'cloudflare', repository_dir)
 
 def test_init_type_error_2_arg():
     with pytest.raises(TypeError):
-        Certificate('my-domain.com', True)
+        Certificate('my-domain.com', True, repository_dir)
 
 
-certificate = Certificate('wiserpv.com', 'cloudflare')
+certificate = Certificate('wiserpv.com', 'cloudflare', repository_dir)
 # def test_cert_exists():
 #     repository_dir = os.path.dirname(os.path.realpath(__file__))
 #     assert certificate.exists(repository_dir) == True
