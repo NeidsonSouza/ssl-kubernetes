@@ -32,18 +32,18 @@ def test_is_close_to_expire_300_days_left():
     assert certificate.is_close_to_expire(limit_in_days=300) == True
 
 
-# certificate = Certificate('mercurypay.io', 'cloudflare')
-# def test_is_close_to_expire_before_create():
-#     with pytest.raises(FileNotFoundError):
-#         certificate.is_close_to_expire()
+certificate_mercury = Certificate('mercurypay.io', 'cloudflare')
+def test_is_close_to_expire_before_create():
+    with pytest.raises(FileNotFoundError):
+        certificate_mercury.is_close_to_expire()
 
-# def test_cert_exists_before_create():
-#     assert certificate.exists() == False
+def test_cert_exists_before_create():
+    assert certificate_mercury.exists() == False
 
 # def test_create():
-#     certificate.create()
-#     assert certificate.is_close_to_expire() == False
+#     certificate_mercury.create()
+#     assert certificate_mercury.is_close_to_expire() == False
 
 # def test_cert_exists_after_create():
-#     assert certificate.exists() == True
+#     assert certificate_mercury.exists() == True
 #
