@@ -2,3 +2,5 @@ letsencrypt/csr/
 letsencrypt/keys/
 __pycache__
 .pytest_cache
+.vscode
+**/cloudflare.ini
