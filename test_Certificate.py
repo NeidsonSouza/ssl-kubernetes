@@ -22,15 +22,14 @@ def test_init_type_error_2_arg():
 
 
 certificate = Certificate('wiserpv.com', 'cloudflare', repository_dir)
-# def test_cert_exists():
-#     repository_dir = os.path.dirname(os.path.realpath(__file__))
-#     assert certificate.exists(repository_dir) == True
+def test_cert_exists():
+    assert certificate.exists() == True
 
 def test_is_close_to_expire():
-    assert certificate.is_close_to_expire() == False
+    assert certificate.is_close_to_expire(repository_dir) == False
 
 def test_is_close_to_expire_300_days_left():
-    assert certificate.is_close_to_expire(days_left=300) == True
+    assert certificate.is_close_to_expire(repository_dir, days_left=300) == True
 
 
 # certificate = Certificate('mercurypay.io', 'cloudflare')
