@@ -29,7 +29,7 @@ def test_is_close_to_expire():
     assert certificate.is_close_to_expire() == False
 
 def test_is_close_to_expire_300_days_left():
-    assert certificate.is_close_to_expire(days_left=300) == True
+    assert certificate.is_close_to_expire(limit_in_days=300) == True
 
 
 # certificate = Certificate('mercurypay.io', 'cloudflare')
