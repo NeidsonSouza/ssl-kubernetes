@@ -34,15 +34,15 @@ class Certificate:
         return self.__all_pem_files_exist(self.cert_dir, pem_files)
 
     
-    def __all_pem_files_exist(self, cert_path, pem_files):
+    def __all_pem_files_exist(self, cert_dir, pem_files):
         pem_files_flag = [
-            os.path.exists(cert_path + '/' + each_file)
+            os.path.exists(cert_dir + '/' + each_file)
             for each_file in pem_files
             ]
         return all(pem_files_flag)
 
     
-    def is_close_to_expire(self, repository_dir, limit_in_days=7):
+    def is_close_to_expire(self, limit_in_days=7):
         cert_full_path = self.cert_dir + 'cert.pem'
         cert_pem = crypto.load_certificate(
             crypto.FILETYPE_PEM,
