@@ -32,7 +32,7 @@ def test_is_close_to_expire_300_days_left():
     assert certificate.is_close_to_expire(limit_in_days=300) == True
 
 
-certificate_mercury = Certificate('mercurypay.io', 'cloudflare')
+certificate_mercury = Certificate('mercurypay.io', 'cloudflare', repository_dir)
 def test_is_close_to_expire_before_create():
     with pytest.raises(FileNotFoundError):
         certificate_mercury.is_close_to_expire()
