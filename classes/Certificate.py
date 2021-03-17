@@ -71,7 +71,8 @@ class Certificate:
 
 
     def rm_domain_conf_file(self):
-        os.system('rm {}/letsencrypt/renewal/{}.conf'.format(
+        conf_file = 'rm {}/letsencrypt/renewal/{}.conf'.format(
             self.repository_dir, self.domain
         )
-        )
+        if os.path.exists(conf_file):
+            os.system(conf_file)

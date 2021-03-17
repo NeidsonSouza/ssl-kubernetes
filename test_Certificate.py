@@ -25,9 +25,9 @@ certificate_mercury = Certificate('mercurypay.io', 'cloudflare', repository_dir)
 def test_is_close_to_expire_before_create():
     certificate_mercury.rm_domain_conf_file()
     os.system('rm -rf {} {}/letsencrypt/archive/{}'.format(
-        certificate.cert_dir,
+        certificate_mercury.cert_dir,
         repository_dir,
-        certificate.domain
+        certificate_mercury.domain
         ))
     with pytest.raises(FileNotFoundError):
         certificate_mercury.is_close_to_expire()
