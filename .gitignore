@@ -1,5 +1,6 @@
 letsencrypt/csr/
 letsencrypt/keys/
+letsencrypt/renewal/
 __pycache__
 .pytest_cache
 .vscode
