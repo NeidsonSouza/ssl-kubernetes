@@ -31,6 +31,7 @@ if len(domains_fails) > 0:
         # 'jose.lucas@wisereducacao.com',
         # 'lucas.amaral@wisereducacao.com',
         # 'vinicios.ribeiro@wisereducacao.com',
+        # 'samuel.godoy@wisereducacao.com',
         'neidson.souza@wisereducacao.com'
         ]
     subject = "[WARNING] Falha ao gerar certificados"
