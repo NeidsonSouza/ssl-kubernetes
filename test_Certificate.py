@@ -38,6 +38,13 @@ def test_is_close_to_expire_before_create():
         certificate_mercury.is_close_to_expire()
 
 def test_cert_exists_before_create():
+    certificate_mercury.rm_domain_conf_file()
+    os.system('rm -rf {} {}/letsencrypt/archive/{}'.format(
+        certificate.cert_dir,
+        repository_dir,
+        certificate.domain
+        ))
+
     assert certificate_mercury.exists() == False
 
 def test_create():

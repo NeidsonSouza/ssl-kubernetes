@@ -61,7 +61,7 @@ class Certificate:
 
 
     def create(self, letsencrypt_server):
-        self.__rm_domain_conf_file()
+        self.rm_domain_conf_file()
         output = os.system('bash {}/wildcard_cloudflare.sh {} {}'.format(
             self.repository_dir,
             self.domain,
@@ -70,7 +70,7 @@ class Certificate:
             )
 
 
-    def __rm_domain_conf_file(self):
+    def rm_domain_conf_file(self):
         os.system('rm {}/letsencrypt/renewal/{}.conf'.format(
             self.repository_dir, self.domain
         )
