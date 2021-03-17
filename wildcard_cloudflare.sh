@@ -2,7 +2,7 @@
 
 CERTBOT="docker run --rm -ti -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
 DOMAIN=$1
-FOLDER=$2
+SERVER=$2
 
 echo Gerando certificado wildcard SSL para o domÃ­nio $DOMAIN
 
@@ -17,8 +17,9 @@ mkdir -p /tmp/letsencrypt/$DOMAIN
 echo $CERTBOT
 
 $CERTBOT certonly \
+  --non-interactive \
   --email dominios@wisereducacao.com \
-  --server https://acme-v02.api.letsencrypt.org/directory \
+  --server $SERVER \
   --dns-cloudflare \
   --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini \
   --dns-cloudflare-propagation-seconds 120 \

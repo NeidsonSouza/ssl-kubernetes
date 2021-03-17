@@ -6,8 +6,9 @@ class Certificate:
     def __init__(self, domain, domain_manager, repository_dir):
         self.domain = self.__set_attribute(domain)
         self.domain_manager = self.__set_attribute(domain_manager)
+        self.repository_dir = __set_attribute(repository_dir)
         self.cert_dir = '{}/letsencrypt/live/{}/'.format(
-            self.__set_attribute(repository_dir),
+            self.repository_dir,
             self.domain
             )
 
@@ -49,7 +50,6 @@ class Certificate:
             open(cert_full_path, 'r').read()
             )
         cert_pem_days_left = self.__get_how_many_days_left(cert_pem)
-
         return cert_pem_days_left < limit_in_days
 
 
@@ -57,9 +57,12 @@ class Certificate:
         cert_string_time = cert_pem.get_notAfter().decode('ascii')
         cert_datetime = datetime.strptime(cert_string_time, "%Y%m%d%H%M%SZ")
         result = cert_datetime - datetime.now()
-
         return result.days
 
 
-    def create(self):
-        pass
+    def create(self, letsencrypt_server):
+        os.system('bash {}/wildcard_cloudflare.sh {} {}'.format(
+            self.repository_dir,
+            self.domain,
+            letsencrypt_server
+        ))
