@@ -1,18 +1,21 @@
 import os
-
 from classes.Certificate import Certificate
+from classes.File import File
 
-certificate = Certificate("mercurypay.io", "souza")
-repository_dir = os.path.dirname(os.path.realpath(__file__))
-print(certificate.exists(repository_dir))
+# SERVER = 'https://acme-v02.api.letsencrypt.org/directory' # Production server
+SERVER = 'https://acme-staging-v02.api.letsencrypt.org/directory' # Staging server
+REPOSITORY_DIR = os.path.dirname(os.path.realpath(__file__))
 
+domains_file = File('domains')
+domains = domains_file.get_content_as_list()
 
-# from OpenSSL import crypto
-# import datetime
-# my_file = crypto.load_certificate(crypto.FILETYPE_PEM, open("letsencrypt/live/mercurypay.io/cert.pem", "r").read())
-# my_file.get_notAfter()
-# str_time = my_file.get_notAfter().decode('ascii')
-# cert_time = datetime.datetime.strptime(str_time, "%Y%m%d%H%M%SZ")
-
-# result = cert_time - datetime.datetime.now() 
-# print(result.days)
+for domain in domains:
+    certificate = Certificate(domain.name)
+    if certificate.exists():
+        if certificate.is_close_to_expire(limit_in_days=7):
+            certificate.create(SERVER)
+    else:
+        certificate.create(SERVER)
+    if certificate.is_close_to_expire(SERVER):
+        pass
+        # send_email

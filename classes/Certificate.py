@@ -16,15 +16,15 @@ class Certificate:
     def __set_attribute(self, attribute):
         if not isinstance(attribute, str):
             warning_phase = "ERROR: '{}' should be a string"
-            self.raise_error(TypeError, warning_phase, attribute)
+            self.__raise_error(TypeError, warning_phase, attribute)
         elif len(attribute) == 0:
             warning_phase = "ERROR: '{}' shouldn't have length equal zero"
-            self.raise_error(ValueError, warning_phase, attribute)
+            self.__raise_error(ValueError, warning_phase, attribute)
         else:
             return attribute
 
 
-    def raise_error(self, error_function, warning_phase, key_word):
+    def __raise_error(self, error_function, warning_phase, key_word):
         raise error_function(warning_phase.format(key_word))
 
 
