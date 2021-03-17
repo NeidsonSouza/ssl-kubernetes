@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CERTBOT="docker run --rm -ti -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
+CERTBOT="docker run --rm -i -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
 DOMAIN=$1
 SERVER=$2
 

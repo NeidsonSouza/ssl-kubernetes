@@ -6,7 +6,7 @@ class Certificate:
     def __init__(self, domain, domain_manager, repository_dir):
         self.domain = self.__set_attribute(domain)
         self.domain_manager = self.__set_attribute(domain_manager)
-        self.repository_dir = __set_attribute(repository_dir)
+        self.repository_dir = self.__set_attribute(repository_dir)
         self.cert_dir = '{}/letsencrypt/live/{}/'.format(
             self.repository_dir,
             self.domain
@@ -61,8 +61,10 @@ class Certificate:
 
 
     def create(self, letsencrypt_server):
-        os.system('bash {}/wildcard_cloudflare.sh {} {}'.format(
+        output = os.popen('bash {}/wildcard_cloudflare.sh {} {}'.format(
             self.repository_dir,
             self.domain,
             letsencrypt_server
-        ))
+            )
+            )
+        print(output.read())
