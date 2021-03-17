@@ -21,35 +21,26 @@ def test_init_type_error_2_arg():
         Certificate('my-domain.com', True, repository_dir)
 
 
-certificate = Certificate('wiserpv.com', 'cloudflare', repository_dir)
-def test_cert_exists():
-    assert certificate.exists() == True
-
-def test_is_close_to_expire():
-    assert certificate.is_close_to_expire() == False
-
-def test_is_close_to_expire_300_days_left():
-    assert certificate.is_close_to_expire(limit_in_days=300) == True
-
-
 certificate_mercury = Certificate('mercurypay.io', 'cloudflare', repository_dir)
 def test_is_close_to_expire_before_create():
-    with pytest.raises(FileNotFoundError):
-        certificate_mercury.is_close_to_expire()
-
-def test_cert_exists_before_create():
     certificate_mercury.rm_domain_conf_file()
     os.system('rm -rf {} {}/letsencrypt/archive/{}'.format(
         certificate.cert_dir,
         repository_dir,
         certificate.domain
         ))
+    with pytest.raises(FileNotFoundError):
+        certificate_mercury.is_close_to_expire()
 
+def test_cert_exists_before_create():
     assert certificate_mercury.exists() == False
 
 def test_create():
     certificate_mercury.create('https://acme-staging-v02.api.letsencrypt.org/directory')
     assert certificate_mercury.is_close_to_expire() == False
+
+def test_is_close_to_expire_300_days_left():
+    assert certificate.is_close_to_expire(limit_in_days=300) == True
 
 def test_cert_exists_after_create():
     assert certificate_mercury.exists() == True
