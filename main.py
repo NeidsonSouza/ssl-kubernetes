@@ -1,6 +1,9 @@
 import os
+import sys
 from classes.Certificate import Certificate
+from classes.GmailAccount import GmailAccount
 from classes.File import File
+from classes.EmailMessage import EmailMessage
 
 # SERVER = 'https://acme-v02.api.letsencrypt.org/directory' # Production server
 SERVER = 'https://acme-staging-v02.api.letsencrypt.org/directory' # Staging server
@@ -9,6 +12,7 @@ REPOSITORY_DIR = os.path.dirname(os.path.realpath(__file__))
 domains_file = File('domains')
 domains = domains_file.get_content_as_list()
 
+domains_fails = []
 for domain in domains:
     certificate = Certificate(domain.name, domain.owner, REPOSITORY_DIR)
     if certificate.exists():
@@ -16,6 +20,25 @@ for domain in domains:
             certificate.create(SERVER)
     else:
         certificate.create(SERVER)
-    if certificate.is_close_to_expire():
-        print('sending email...') # apagar
-        # send_email
+    if certificate.is_close_to_expire(limit_in_days=300):
+        domains_fails.append(domain.name)        
+
+
+if len(domains_fails) > 0:
+    sent_from = 'infra.edtech@wisereducacao.com'
+    to = [
+        # 'felipe.lamarao@wisereducacao.com',
+        # 'jose.lucas@wisereducacao.com',
+        # 'lucas.amaral@wisereducacao.com',
+        # 'vinicios.ribeiro@wisereducacao.com',
+        'neidson.souza@wisereducacao.com'
+        ]
+    subject = "[WARNING] Falha ao gerar certificados"
+    email = EmailMessage(domains_fails)
+    message = email.create_email_message(sent_from, to, subject)
+
+    print(message)
+    gmail_password = sys.argv[1]
+    gmail_account = GmailAccount('infra.edtech@wisereducacao.com', gmail_password)
+    gmail_account.server.sendmail(sent_from, to, message)
+    gmail_account.server.close()
