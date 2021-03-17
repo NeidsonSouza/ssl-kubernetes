@@ -40,7 +40,7 @@ def test_create():
     assert certificate_mercury.is_close_to_expire() == False
 
 def test_is_close_to_expire_300_days_left():
-    assert certificate.is_close_to_expire(limit_in_days=300) == True
+    assert certificate_mercury.is_close_to_expire(limit_in_days=300) == True
 
 def test_cert_exists_after_create():
     assert certificate_mercury.exists() == True
