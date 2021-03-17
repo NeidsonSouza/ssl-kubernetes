@@ -61,10 +61,9 @@ class Certificate:
 
 
     def create(self, letsencrypt_server):
-        output = os.popen('bash {}/wildcard_cloudflare.sh {} {}'.format(
+        output = os.system('bash {}/wildcard_cloudflare.sh {} {}'.format(
             self.repository_dir,
             self.domain,
             letsencrypt_server
             )
             )
-        print(output.read())
