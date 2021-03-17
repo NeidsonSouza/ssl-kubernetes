@@ -40,10 +40,9 @@ def test_is_close_to_expire_before_create():
 def test_cert_exists_before_create():
     assert certificate_mercury.exists() == False
 
-# def test_create():
-#     certificate_mercury.create('https://acme-staging-v02.api.letsencrypt.org/directory')
-#     assert certificate_mercury.is_close_to_expire() == False
+def test_create():
+    certificate_mercury.create('https://acme-staging-v02.api.letsencrypt.org/directory')
+    assert certificate_mercury.is_close_to_expire() == False
 
-# def test_cert_exists_after_create():
-#     assert certificate_mercury.exists() == True
-#
+def test_cert_exists_after_create():
+    assert certificate_mercury.exists() == True
