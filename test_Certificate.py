@@ -24,7 +24,8 @@ def test_init_type_error_2_arg():
 certificate_mercury = Certificate('mercurypay.io', 'cloudflare', repository_dir)
 def test_is_close_to_expire_before_create():
     certificate_mercury.rm_domain_conf_file()
-    os.system('rm -rf {} {}/letsencrypt/archive/{}'.format(
+    os.system('rm -rf {} {} {}/letsencrypt/archive/{}'.format(
+        repository_dir + '/letsencrypt/renewal/' + certificate_mercury.domain + '*',
         certificate_mercury.cert_dir,
         repository_dir,
         certificate_mercury.domain

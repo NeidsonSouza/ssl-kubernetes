@@ -10,12 +10,12 @@ domains_file = File('domains')
 domains = domains_file.get_content_as_list()
 
 for domain in domains:
-    certificate = Certificate(domain.name)
+    certificate = Certificate(domain.name, domain.owner, REPOSITORY_DIR)
     if certificate.exists():
-        if certificate.is_close_to_expire(limit_in_days=7):
+        if certificate.is_close_to_expire():
             certificate.create(SERVER)
     else:
         certificate.create(SERVER)
-    if certificate.is_close_to_expire(SERVER):
-        pass
+    if certificate.is_close_to_expire():
+        print('sending email...') # apagar
         # send_email

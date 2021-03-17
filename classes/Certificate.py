@@ -3,9 +3,9 @@ from OpenSSL import crypto
 from datetime import datetime
 
 class Certificate:
-    def __init__(self, domain, domain_manager, repository_dir):
+    def __init__(self, domain, domain_owner, repository_dir):
         self.domain = self.__set_attribute(domain)
-        self.domain_manager = self.__set_attribute(domain_manager)
+        self.domain_owner = self.__set_attribute(domain_owner)
         self.repository_dir = self.__set_attribute(repository_dir)
         self.cert_dir = '{}/letsencrypt/live/{}/'.format(
             self.repository_dir,
