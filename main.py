@@ -26,14 +26,7 @@ for domain in domains:
 
 if len(domains_fails) > 0:
     sent_from = 'infra.edtech@wisereducacao.com'
-    to = [
-        # 'felipe.lamarao@wisereducacao.com',
-        # 'jose.lucas@wisereducacao.com',
-        # 'lucas.amaral@wisereducacao.com',
-        # 'vinicios.ribeiro@wisereducacao.com',
-        # 'samuel.godoy@wisereducacao.com',
-        'neidson.souza@wisereducacao.com'
-        ]
+    to = File('emails').read_file()
     subject = "[WARNING] Falha ao gerar certificados"
     email = EmailMessage(domains_fails)
     message = email.create_email_message(sent_from, to, subject)
