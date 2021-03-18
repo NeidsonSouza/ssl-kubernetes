@@ -20,7 +20,7 @@ for domain in domains:
             certificate.create(SERVER)
     else:
         certificate.create(SERVER)
-    if certificate.is_close_to_expire():
+    if certificate.is_close_to_expire(limit_in_days=300):
         domains_fails.append(domain.name)        
 
 
