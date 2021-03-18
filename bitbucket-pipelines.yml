@@ -2,7 +2,7 @@ image: python:3.7.10-alpine3.13
 
 pipelines:
   custom:
-    send-email-notification:
+    create-cert:
       - step:
           caches:
             - pip
