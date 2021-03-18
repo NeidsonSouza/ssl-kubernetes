@@ -1,10 +1,10 @@
 #!/bin/bash
 
-CERTBOT="docker run --rm -i -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
+# CERTBOT="docker run --rm -i -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
 DOMAIN=$1
 SERVER=$2
 
-echo Gerando certificado wildcard SSL para o domÃ­nio $DOMAIN
+echo Gerando certificado wildcard SSL para o dominio $DOMAIN
 
 if [ -z $DOMAIN ]; then
   echo You must inform a domain to generate a SSL
@@ -14,9 +14,7 @@ fi
 
 mkdir -p /tmp/letsencrypt/$DOMAIN
 
-echo $CERTBOT
-
-$CERTBOT certonly \
+certbot certonly \
   --non-interactive \
   --email dominios@wisereducacao.com \
   --server $SERVER \
