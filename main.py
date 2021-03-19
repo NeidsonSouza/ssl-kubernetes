@@ -6,7 +6,7 @@ from classes.File import File
 from classes.EmailMessage import EmailMessage
 
 # SERVER = 'https://acme-v02.api.letsencrypt.org/directory' # Production server
-SERVER = 'https://acme-staging-v02.api.letsencrypt.org/directory' # Staging server
+SERVER = 'https://acme-staging-v02.api.letsencrypt.org/directory'  # Staging server
 REPOSITORY_DIR = os.path.dirname(os.path.realpath(__file__))
 
 domains_file = File('domains')
@@ -23,12 +23,8 @@ for domain in domains:
         certificate.create(SERVER)
         should_commit = True
     if certificate.is_close_to_expire():
-        domains_fails.append(domain.name)        
+        domains_fails.append(domain.name)
 
-
-
-if should_commit:
-    git_commit()
 
 def git_commit():
     os.system('git add -A')
@@ -36,7 +32,8 @@ def git_commit():
     os.system("git push")
 
 
-
+if should_commit:
+    git_commit()
 
 if len(domains_fails) > 0:
     sent_from = 'infra.edtech@wisereducacao.com'
@@ -47,6 +44,7 @@ if len(domains_fails) > 0:
 
     print(message)
     gmail_password = sys.argv[1]
-    gmail_account = GmailAccount('infra.edtech@wisereducacao.com', gmail_password)
+    gmail_account = GmailAccount(
+        'infra.edtech@wisereducacao.com', gmail_password)
     gmail_account.server.sendmail(sent_from, to, message)
     gmail_account.server.close()
