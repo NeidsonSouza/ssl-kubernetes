@@ -13,6 +13,7 @@ domains_file = File('domains')
 domains = domains_file.get_content_as_list()
 
 domains_fails = []
+should_commit = False
 for domain in domains:
     certificate = Certificate(domain.name, domain.owner, REPOSITORY_DIR)
     if certificate.exists():
@@ -20,8 +21,21 @@ for domain in domains:
             certificate.create(SERVER)
     else:
         certificate.create(SERVER)
+        should_commit = True
     if certificate.is_close_to_expire():
         domains_fails.append(domain.name)        
+
+
+
+if should_commit:
+    git_commit()
+
+def git_commit():
+    os.system('git add -A')
+    os.system("git commit -m'[skip ci] Adding certs'")
+    os.system("git push")
+
+
 
 
 if len(domains_fails) > 0:
