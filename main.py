@@ -25,15 +25,10 @@ for domain in domains:
     if certificate.is_close_to_expire():
         domains_fails.append(domain.name)
 
-
-def git_commit():
+if should_commit:
     os.system('git add -A')
     os.system("git commit -m'[skip ci] Adding certs'")
     os.system("git push")
-
-
-if should_commit:
-    git_commit()
 
 if len(domains_fails) > 0:
     sent_from = 'infra.edtech@wisereducacao.com'
