@@ -26,7 +26,7 @@ for domain in domains:
         domains_fails.append(domain.name)
 
 if should_commit:
-    os.system('git add -A')
+    os.system('git add *.pem')
     os.system("git commit -m'[skip ci] Adding certs'")
     os.system("git push")
 
