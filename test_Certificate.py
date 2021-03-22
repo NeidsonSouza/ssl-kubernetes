@@ -1,7 +1,11 @@
 import pytest
 import os
 from classes.Certificate import Certificate
+from dotenv import load_dotenv
 
+load_dotenv('.env.dev')
+os.environ['APP_ROOT_DIR'] = os.path.dirname(os.path.realpath(__file__))
+os.chdir(os.getenv('APP_ROOT_DIR'))
 
 @pytest.fixture
 def repository_dir():
@@ -55,7 +59,7 @@ def test_is_close_to_expire_before_create(tmp_path, get_cert_before_creation):
 
 # parei aqui. Este teste não funciona
 def test_create(tmp_path, get_cert_before_creation):
-    get_cert_before_creation.create(staging_server=True)
+    get_cert_before_creation.create()
     assert get_cert_before_creation.is_close_to_expire() == False
 
 # def test_is_close_to_expire_300_days_left():

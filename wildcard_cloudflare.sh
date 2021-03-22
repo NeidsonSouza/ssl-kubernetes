@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# CERTBOT="docker run --rm -i -v $(pwd)/letsencrypt:/etc/letsencrypt certbot/dns-cloudflare"
 DOMAIN=$1
-SERVER=$2
 
 echo Gerando certificado wildcard SSL para o dominio $DOMAIN
 
@@ -23,10 +21,3 @@ certbot certonly \
   --dns-cloudflare-propagation-seconds 120 \
   --agree-tos \
   -d ${DOMAIN},*.${DOMAIN}
-
-# if [ -z $FOLDER ]; then
-#   echo You must copy your new certificates into your working folder like this:
-#   echo cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/[PATH]/ssl/${DOMAIN}
-# else
-#   cp -L ./letsencrypt/live/${DOMAIN}/* ../metadata/${FOLDER}/ssl/${DOMAIN}
-# fi

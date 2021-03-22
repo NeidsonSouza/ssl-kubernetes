@@ -4,9 +4,12 @@ from classes.Certificate import Certificate
 from classes.GmailAccount import GmailAccount
 from classes.File import File
 from classes.EmailMessage import EmailMessage
+from dotenv import load_dotenv
 
+load_dotenv()
 
-REPOSITORY_DIR = os.path.dirname(os.path.realpath(__file__))
+os.environ['APP_ROOT_DIR'] = os.path.dirname(os.path.realpath(__file__))
+os.chdir(os.getenv('APP_ROOT_DIR'))
 
 domains_file = File('domains')
 domains = domains_file.get_content_as_list()
