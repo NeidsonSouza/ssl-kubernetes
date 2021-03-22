@@ -17,4 +17,4 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py $GMAIL_PASSWORD
+            - python main.py

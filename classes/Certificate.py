@@ -3,11 +3,11 @@ from OpenSSL import crypto
 from datetime import datetime
 
 class Certificate:
-    def __init__(self, domain, domain_owner, repository_dir):
+    def __init__(self, domain, domain_host, repository_dir):
         self.domain = self.__set_attribute(domain)
-        self.domain_owner = self.__set_attribute(domain_owner)
+        self.domain_host = self.__set_attribute(domain_host)
         self.repository_dir = self.__set_attribute(repository_dir)
-        self.cert_dir = '{}/letsencrypt/live/{}/'.format(
+        self.live_dir = '{}/letsencrypt/live/{}/'.format(
             self.repository_dir,
             self.domain
             )
@@ -32,19 +32,19 @@ class Certificate:
         pem_files = [
             'cert.pem', 'chain.pem', 'fullchain.pem', 'privkey.pem'
             ]
-        return self.__all_pem_files_exist(self.cert_dir, pem_files)
+        return self.__all_pem_files_exist(self.live_dir, pem_files)
 
     
-    def __all_pem_files_exist(self, cert_dir, pem_files):
+    def __all_pem_files_exist(self, live_dir, pem_files):
         pem_files_flag = [
-            os.path.exists(cert_dir + '/' + each_file)
+            os.path.exists(live_dir + '/' + each_file)
             for each_file in pem_files
             ]
         return all(pem_files_flag)
 
     
     def is_close_to_expire(self, limit_in_days=7):
-        cert_full_path = self.cert_dir + 'cert.pem'
+        cert_full_path = self.live_dir + 'cert.pem'
         cert_pem = crypto.load_certificate(
             crypto.FILETYPE_PEM,
             open(cert_full_path, 'r').read()
@@ -60,12 +60,17 @@ class Certificate:
         return result.days
 
 
-    def create(self, letsencrypt_server):
+    def create(self, staging_server=False):
+        if staging_server == True:
+            server = 'https://acme-staging-v02.api.letsencrypt.org/directory'
+        else:
+            server = 'https://acme-v02.api.letsencrypt.org/directory'
+         
         self.rm_domain_conf_file()
         output = os.system('bash {}/wildcard_cloudflare.sh {} {}'.format(
             self.repository_dir,
             self.domain,
-            letsencrypt_server
+            server
             )
             )
 

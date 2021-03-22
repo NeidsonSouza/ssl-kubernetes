@@ -5,8 +5,7 @@ from classes.GmailAccount import GmailAccount
 from classes.File import File
 from classes.EmailMessage import EmailMessage
 
-# SERVER = 'https://acme-v02.api.letsencrypt.org/directory' # Production server
-SERVER = 'https://acme-staging-v02.api.letsencrypt.org/directory'  # Staging server
+
 REPOSITORY_DIR = os.path.dirname(os.path.realpath(__file__))
 
 domains_file = File('domains')
@@ -18,9 +17,9 @@ for domain in domains:
     certificate = Certificate(domain.name, domain.owner, REPOSITORY_DIR)
     if certificate.exists():
         if certificate.is_close_to_expire():
-            certificate.create(SERVER)
+            certificate.create()
     else:
-        certificate.create(SERVER)
+        certificate.create()
         should_commit = True
     if certificate.is_close_to_expire():
         domains_fails.append(domain.name)
@@ -38,8 +37,9 @@ if len(domains_fails) > 0:
     message = email.create_email_message(sent_from, to, subject)
 
     print(message)
-    gmail_password = sys.argv[1]
+    GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD')
     gmail_account = GmailAccount(
-        'infra.edtech@wisereducacao.com', gmail_password)
+        'infra.edtech@wisereducacao.com', GMAIL_PASSWORD
+        )
     gmail_account.server.sendmail(sent_from, to, message)
     gmail_account.server.close()
