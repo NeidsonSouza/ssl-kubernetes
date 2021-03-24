@@ -58,5 +58,6 @@ def test_is_close_to_expire_after_create(get_cert_before_creation):
     get_cert_before_creation.create()
     assert get_cert_before_creation.is_close_to_expire() == False
 
-# def test_is_close_to_expire_300_days_left():
-#     assert mercurypay_cert.is_close_to_expire(limit_in_days=300) == True
+def test_is_close_to_expire_300_days_left(get_cert_before_creation):
+    get_cert_before_creation.create()
+    assert get_cert_before_creation.is_close_to_expire(limit_in_days=300) == True
