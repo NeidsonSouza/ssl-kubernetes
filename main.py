@@ -1,7 +1,7 @@
 import os
 import sys
 from classes.Certificate import Certificate
-from classes.GmailAccount import GmailAccount
+from classes.Gmail import Gmail
 from classes.File import File
 from classes.EmailMessage import EmailMessage
 from dotenv import load_dotenv
@@ -41,7 +41,7 @@ if len(domains_fails) > 0:
 
     print(message)
     GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD')
-    gmail_account = GmailAccount(
+    gmail_account = Gmail(
         'infra.edtech@wisereducacao.com', GMAIL_PASSWORD
         )
     gmail_account.server.sendmail(sent_from, to, message)
