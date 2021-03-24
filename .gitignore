@@ -7,3 +7,4 @@ __pycache__
 **/cloudflare.ini
 .env*
 Dockerfile*
+.dockerignore
