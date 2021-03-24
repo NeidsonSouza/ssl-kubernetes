@@ -7,9 +7,9 @@ from classes.EmailMessage import EmailMessage
 from dotenv import load_dotenv
 
 load_dotenv()
-
 os.environ['APP_ROOT_DIR'] = os.path.dirname(os.path.realpath(__file__))
-os.chdir(os.getenv('APP_ROOT_DIR'))
+os.environ['LETSENCRYPT_DIR'] = os.environ.get('APP_ROOT_DIR') + '/letsencrypt/'
+os.chdir(os.environ.get('APP_ROOT_DIR'))
 
 domains_file = File('domains')
 domains = domains_file.get_content_as_list()

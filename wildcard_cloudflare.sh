@@ -11,6 +11,7 @@ if [ -z $DOMAIN ]; then
 fi
 
 mkdir -p /tmp/letsencrypt/$DOMAIN
+echo Servidor: $SERVER
 
 certbot certonly \
   --non-interactive \

@@ -4,10 +4,9 @@ from datetime import datetime
 
 
 class Certificate:
-    def __init__(self, domain, domain_host, repository_dir):
+    def __init__(self, domain, domain_host):
         self.domain = self.__set_attribute(domain)
         self.domain_host = self.__set_attribute(domain_host)
-        self.repository_dir = self.__set_attribute(repository_dir)
         self.live_dir = 'letsencrypt/live/{}/'.format(
             self.domain
         )
@@ -54,10 +53,18 @@ class Certificate:
         return result.days
 
     def create(self, staging=False):
-        self.rm_domain_conf_file()
+        self.__rm_domain_conf_file()
         output = os.system(
-            'bash wildcard_cloudflare.sh {}'.format(self.domain,)
+            'bash wildcard_cloudflare.sh {}'.format(self.domain)
             )
 
-    def rm_domain_conf_file(self):
-        os.system('rm letsencrypt/renewal/{}.conf'.format(self.domain))
+    def __rm_domain_conf_file(self):
+        archive_dir = 'letsencrypt/archive/{}'.format(self.domain)
+        conf_file = 'letsencrypt/renewal/{}.conf'.format(self.domain)
+        files_to_be_removed = [self.live_dir, archive_dir, conf_file]
+        self.__rm_files(files_to_be_removed)
+
+    def __rm_files(self, files_to_be_removed):
+        for filename in files_to_be_removed:    
+            if os.path.exists(filename):
+                os.system('rm -rf {}'.format(filename))
