@@ -25,7 +25,7 @@ def cert_before_creation():
             if os.path.exists(filename):
                 os.system('rm -rf {}'.format(filename))
 
-    cert = Certificate('mercurypay.io', 'cloudflare')
+    cert = Certificate('wiserpv.com', 'cloudflare')
     archive_dir = 'letsencrypt/archive/{}'.format(cert.domain)
     conf_file = 'letsencrypt/renewal/{}.conf'.format(cert.domain)
     files_to_be_removed = [cert.live_dir, archive_dir, conf_file]
