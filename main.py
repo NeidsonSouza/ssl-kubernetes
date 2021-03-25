@@ -56,14 +56,15 @@ def get_email_message(domains_that_fail):
 
 
 def send_email(message):
-    GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD')
-    gmail_account = Gmail(
-        'infra.edtech@wisereducacao.com', GMAIL_PASSWORD
-    )
-    sent_from = 'infra.edtech@wisereducacao.com'
-    to = File('emails').get_data_from_file()
-    gmail_account.server.sendmail(sent_from, to, message)
-    gmail_account.server.close()
+    if isinstance(message, str):
+        GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD')
+        gmail_account = Gmail(
+            'infra.edtech@wisereducacao.com', GMAIL_PASSWORD
+        )
+        sent_from = 'infra.edtech@wisereducacao.com'
+        to = File('emails').get_data_from_file()
+        gmail_account.server.sendmail(sent_from, to, message)
+        gmail_account.server.close()
 
 
 if __name__ == '__main__':
