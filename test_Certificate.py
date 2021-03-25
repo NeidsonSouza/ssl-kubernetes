@@ -1,5 +1,6 @@
 import pytest
 import os
+from functions.functions import get_cert_before_creation
 from classes.Certificate import Certificate
 
 
@@ -20,17 +21,8 @@ def test_init_type_error_second_arg():
 
 @pytest.fixture
 def cert_before_creation():
-    def rm_files(files_to_be_removed):
-        for filename in files_to_be_removed:
-            if os.path.exists(filename):
-                os.system('rm -rf {}'.format(filename))
-
     cert = Certificate('wiserpv.com', 'cloudflare')
-    archive_dir = 'letsencrypt/archive/{}'.format(cert.domain)
-    conf_file = 'letsencrypt/renewal/{}.conf'.format(cert.domain)
-    files_to_be_removed = [cert.live_dir, archive_dir, conf_file]
-    rm_files(files_to_be_removed)
-    return cert
+    return get_cert_before_creation(cert)
 
 
 def test_cert_exists_before_create(cert_before_creation):

@@ -55,4 +55,4 @@ class Certificate:
     def create(self, staging=False):
         output = os.system(
             'bash wildcard_cloudflare.sh {}'.format(self.domain)
-            )
+        )

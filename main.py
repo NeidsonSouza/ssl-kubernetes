@@ -12,8 +12,9 @@ def get_domains_as_class():
     return domains
 
 
-def create_certs_if_expired(domains):
-    global should_commit = False
+def create_certs_if_expired_or_inexistent(domains):
+    global should_commit
+    should_commit = False
     for domain in domains:
         cert = Certificate(domain.name, domain.owner)
         if cert.exists():
@@ -27,7 +28,11 @@ def create_certs_if_expired(domains):
 def get_domains_that_fail(domains):
     domains_that_fail = []
     for domain in domains:
-        if cert.is_close_to_expire():
+        cert = Certificate(domain.name, domain.owner)
+        if cert.exists():
+            if cert.is_close_to_expire():
+                domains_that_fail.append(domain.name)
+        else:
             domains_that_fail.append(domain.name)
     return domains_that_fail
 
@@ -42,7 +47,7 @@ def git_push(should_commit):
 def get_email_message(domains_that_fail):
     if len(domains_that_fail) > 0:
         sent_from = 'infra.edtech@wisereducacao.com'
-        to = File('emails').read_file()
+        to = File('emails').get_data_from_file()
         subject = "[WARNING] Falha ao gerar certificados"
         email = EmailMessage(domains_that_fail)
         message = email.create_email_message(sent_from, to, subject)
@@ -61,7 +66,7 @@ def send_email(message):
 
 if __name__ == '__main__':
     domains = get_domains_as_class()
-    create_certs_if_expired(domains)
+    create_certs_if_expired_or_inexistent(domains)
     domains_that_fail = get_domains_that_fail(domains)
     message = get_email_message(domains_that_fail)
     send_email(message)
