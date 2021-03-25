@@ -60,6 +60,8 @@ def send_email(message):
     gmail_account = Gmail(
         'infra.edtech@wisereducacao.com', GMAIL_PASSWORD
     )
+    sent_from = 'infra.edtech@wisereducacao.com'
+    to = File('emails').get_data_from_file()
     gmail_account.server.sendmail(sent_from, to, message)
     gmail_account.server.close()
 
