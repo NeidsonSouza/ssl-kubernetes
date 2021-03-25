@@ -10,11 +10,11 @@ pipelines:
           script:
             # Installing dependencies
             - apt update
-            - apt install -y certbot git
+            - apt install -y certbot=0.31.0-1+deb10u1 git
             - pip install -r requirements.txt
             # Managing files
             - rm -r /etc/letsencrypt/
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py $GMAIL_PASSWORD
+            - python main.py

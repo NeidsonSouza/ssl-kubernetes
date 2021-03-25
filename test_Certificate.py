@@ -1,47 +1,49 @@
 import pytest
 import os
+from functions.functions import get_cert_before_creation
 from classes.Certificate import Certificate
 
-repository_dir = os.path.dirname(os.path.realpath(__file__))
 
-def test_init_value_error_1_arg():
+def test_init_missing_arg():
     with pytest.raises(ValueError):
-        Certificate('', 'cloudflare', repository_dir)
+        Certificate('', 'cloudflare')
 
-def test_init_value_error_2_arg():
-    with pytest.raises(ValueError):
-        Certificate('my-domain.com', '', repository_dir)
 
-def test_init_type_error_1_arg():
+def test_init_type_error_first_arg():
     with pytest.raises(TypeError):
-        Certificate(2, 'cloudflare', repository_dir)
+        Certificate(0, 'cloudflare')
 
-def test_init_type_error_2_arg():
+
+def test_init_type_error_second_arg():
     with pytest.raises(TypeError):
-        Certificate('my-domain.com', True, repository_dir)
+        Certificate('my-domain.com', True)
 
 
-certificate_mercury = Certificate('mercurypay.io', 'cloudflare', repository_dir)
-def test_is_close_to_expire_before_create():
-    certificate_mercury.rm_domain_conf_file()
-    os.system('rm -rf {} {} {}/letsencrypt/archive/{}'.format(
-        repository_dir + '/letsencrypt/renewal/' + certificate_mercury.domain + '*',
-        certificate_mercury.cert_dir,
-        repository_dir,
-        certificate_mercury.domain
-        ))
+@pytest.fixture
+def cert_before_creation():
+    cert = Certificate('wiserpv.com', 'cloudflare')
+    return get_cert_before_creation(cert)
+
+
+def test_cert_exists_before_create(cert_before_creation):
+    assert cert_before_creation.exists() == False
+
+
+def test_is_close_to_expire_before_create(cert_before_creation):
     with pytest.raises(FileNotFoundError):
-        certificate_mercury.is_close_to_expire()
+        cert_before_creation.is_close_to_expire()
 
-def test_cert_exists_before_create():
-    assert certificate_mercury.exists() == False
 
-def test_create():
-    certificate_mercury.create('https://acme-staging-v02.api.letsencrypt.org/directory')
-    assert certificate_mercury.is_close_to_expire() == False
+def test_cert_exists_after_create(cert_before_creation):
+    cert_before_creation.create()
+    assert cert_before_creation.exists() == True
 
-def test_is_close_to_expire_300_days_left():
-    assert certificate_mercury.is_close_to_expire(limit_in_days=300) == True
 
-def test_cert_exists_after_create():
-    assert certificate_mercury.exists() == True
+def test_is_close_to_expire_after_create(cert_before_creation):
+    cert_before_creation.create()
+    assert cert_before_creation.is_close_to_expire() == False
+
+
+def test_is_close_to_expire_300_days_left(cert_before_creation):
+    cert_before_creation.create()
+    assert cert_before_creation.is_close_to_expire(limit_in_days=300) == True
