@@ -48,6 +48,16 @@ def test_init_raise_type_error_3nd_arg():
 def test_cert_is_close_to_expire(webapp):
     assert webapp.is_close_to_expire() == True
 
+
+def test_cert_is_close_to_expire_webapp_dont_exist():
+    domain = 'thisdontexist.com'
+    ip = '6.6.6.6'
+    owner = 'cloudflare'
+    webapp = Webapp(domain, ip, owner)
+    with pytest.raises(TimeoutError):
+        webapp.is_close_to_expire()
+
+
 def test_create_cert():
     domain = 'wiserpv.com'
     ip = '1.1.1.1'
