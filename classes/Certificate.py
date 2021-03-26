@@ -38,6 +38,11 @@ class Certificate:
         return all(pem_files_flag)
 
     def is_close_to_expire(self, limit_in_days=7, cert=None):
+        expiry_date = self.get_expiry_date(cert)
+        time_left = expiry_date - datetime.now()
+        return time_left.days < limit_in_days
+
+    def get_expiry_date(self, cert):
         if cert:
             cert_pem = crypto.load_certificate(
                 crypto.FILETYPE_PEM,
@@ -49,14 +54,10 @@ class Certificate:
                 crypto.FILETYPE_PEM,
                 open(cert_full_path, 'r').read()
             )
-        cert_pem_days_left = self.__get_how_many_days_left(cert_pem)
-        return cert_pem_days_left < limit_in_days
 
-    def __get_how_many_days_left(self, cert_pem):
         cert_string_time = cert_pem.get_notAfter().decode('ascii')
-        cert_datetime = datetime.strptime(cert_string_time, "%Y%m%d%H%M%SZ")
-        result = cert_datetime - datetime.now()
-        return result.days
+        expiry_date = datetime.strptime(cert_string_time, "%Y%m%d%H%M%SZ")
+        return expiry_date
 
     def create(self, staging=False):
         output = os.system(
