@@ -37,12 +37,18 @@ class Certificate:
         ]
         return all(pem_files_flag)
 
-    def is_close_to_expire(self, limit_in_days=7):
-        cert_full_path = self.live_dir + 'cert.pem'
-        cert_pem = crypto.load_certificate(
-            crypto.FILETYPE_PEM,
-            open(cert_full_path, 'r').read()
-        )
+    def is_close_to_expire(self, limit_in_days=7, cert=None):
+        if cert:
+            cert_pem = crypto.load_certificate(
+                crypto.FILETYPE_PEM,
+                cert
+            )
+        else:
+            cert_full_path = self.live_dir + 'cert.pem'
+            cert_pem = crypto.load_certificate(
+                crypto.FILETYPE_PEM,
+                open(cert_full_path, 'r').read()
+            )
         cert_pem_days_left = self.__get_how_many_days_left(cert_pem)
         return cert_pem_days_left < limit_in_days
 
