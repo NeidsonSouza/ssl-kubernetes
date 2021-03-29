@@ -4,13 +4,13 @@ from classes.Webapp import Webapp
 
 
 def main(flag):
-    if len(flag) != 1:
+    if len(flag) != 2:
         raise_error()
-    elif flag == ['--list-certs']:
+    elif flag[1] == '--list-certs':
         list_certs()
-    elif flag == ['--upgrade-certs-repository']:
+    elif flag[1] == '--upgrade-certs-repository':
         pass
-    elif flag == ['--upgrade-certs-prod']:
+    elif flag[1] == '--upgrade-certs-prod':
         pass
     else:
         raise_error()

@@ -6,18 +6,30 @@ import pytest
 def test_main(capsys):
     os.system(
         """\
-echo 'meusucesso.com,34.120.42.5,cloudflare
-wiseup.com,34.95.76.197,cloudflare' > domains
+echo 'wisersp.com,34.107.166.26,cloudflare
+numberone.com.br,34.120.103.130,cloudflare
+meusucesso.com,34.120.42.5,cloudflare
+wiseup.com,34.95.76.197,cloudflare
+powerhouse.pro,34.120.69.210,cloudflare
+wiseupcorp.com,35.186.198.149,cloudflare' > domains
 """
     )
     expected = """\
 {:20} - Expiry date: {}
 {:20} - Expiry date: {}
+{:20} - Expiry date: {}
+{:20} - Expiry date: {}
+{:20} - Expiry date: {}
+{:20} - Expiry date: {}
 """.format(
+        'powerhouse.pro', 'November 26 2019 - 21:15:02',
         'wiseup.com', 'April 06 2020 - 03:12:36',
-        'meusucesso.com', 'April 12 2020 - 17:21:13'
+        'meusucesso.com', 'April 12 2020 - 17:21:13',
+        'numberone.com.br', 'May 31 2020 - 01:41:45',
+        'wiseupcorp.com', 'November 23 2020 - 20:16:34',
+        'wisersp.com', 'June 06 2035 - 00:44:00'
     )
-    sys_argv = ['--list-certs']
+    sys_argv = ['main.py', '--list-certs']
 
     main(sys_argv)
     captured = capsys.readouterr()
