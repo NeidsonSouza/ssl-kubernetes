@@ -1,5 +1,4 @@
 import re
-import OpenSSL
 import ssl
 from datetime import datetime
 
