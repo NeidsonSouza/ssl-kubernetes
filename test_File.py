@@ -31,13 +31,15 @@ def test_get_data_from_empty_file():
 
 def test_get_content_as_list_of_class():
     os.system(
-        'echo  "wiserpv.com=cloudflare\ntest.com=aws" > test_domains'
+        'echo  "wiserpv.com,1.1.1.1,cloudflare\ntest.com,6.6.6.6,aws" > test_domains'
     )
     domain_file = File('test_domains')
     domains = domain_file.get_content_as_list_of_class()
     assert domains[0].name == 'wiserpv.com'
+    assert domains[0].ip == '1.1.1.1'
     assert domains[0].owner == 'cloudflare'
     assert domains[1].name == 'test.com'
+    assert domains[1].ip == '6.6.6.6'
     assert domains[1].owner == 'aws'
 
 

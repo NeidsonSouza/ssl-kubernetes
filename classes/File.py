@@ -24,7 +24,7 @@ class File:
         if self.__is_list_empty(data):
             raise TypeError('ERROR: list of email cannot be empty')
         return data
-    
+
     def __is_list_empty(self, some_list):
         return len(some_list) == 0
 
@@ -48,12 +48,14 @@ class File:
         return clean_list
 
     def get_content_as_list_of_class(self):
-        Domain = namedtuple('Domain', ['name', 'owner'])
+        Domain = namedtuple('Domain', ['name', 'ip', 'owner'])
         domains = self.__read_file()
         domains = self.__clean_list(domains)
         if self.__is_list_empty(domains):
             raise TypeError('ERROR: list of domains cannot be empty')
-        result = [Domain(line.split('=')[0], line.split('=')[1])
-                  for line in domains]
+        result = [Domain(
+            line.split(',')[0], line.split(',')[1], line.split(',')[2]
+        )
+            for line in domains]
 
         return result

@@ -1,15 +1,16 @@
 import sys
 from classes.File import File
+from classes.Webapp import Webapp
 
 
 def main(flag):
-    if len(sys.argv) != 1:
+    if len(flag) != 1:
         raise_error()
-    elif flag == '--list-certs':
+    elif flag == ['--list-certs']:
         list_certs()
-    elif flag == '--upgrade-certs-repository':
+    elif flag == ['--upgrade-certs-repository']:
         pass
-    elif flag == '--upgrade-certs-prod':
+    elif flag == ['--upgrade-certs-prod']:
         pass
     else:
         raise_error()
@@ -29,14 +30,21 @@ Flags available:
 
 
 def list_certs():
-    domains_file
-    #read file
-    #for em cada item
-        # print cada item em ordem de data (menor para maior)
-        
-    #     domains_file = File('domains')
-    # domains = domains_file.get_content_as_list_of_class()
-    # return domains
+    domains = File('domains').get_content_as_list_of_class()
+    list_domain_date = [
+        (
+            domain.name,
+            Webapp(domain.name, domain.ip, domain.owner).get_expiry_date()
+        )
+        for domain in domains
+    ]
+    list_domain_date.sort(key=lambda x: x[1])
+    for domain in list_domain_date:
+        print(
+            '{:20} - Expiry date: {}'.format(
+                domain[0], domain[1].strftime("%B %d %Y - %H:%M:%S")
+            )
+        )
 
 
 if __name__ == '__main__':
