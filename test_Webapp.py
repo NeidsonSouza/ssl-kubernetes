@@ -45,6 +45,10 @@ def test_init_raise_type_error_3nd_arg():
         Webapp('wiseup.com', '1.1.1.1', 0)
 
 
+def test_get_expiry_date(webapp):
+    print(webapp.get_expiry_date())
+
+
 def test_cert_is_close_to_expire(webapp):
     assert webapp.is_close_to_expire() == True
 
@@ -53,9 +57,8 @@ def test_cert_is_close_to_expire_webapp_dont_exist():
     domain = 'thisdontexist.com'
     ip = '6.6.6.6'
     owner = 'cloudflare'
-    webapp = Webapp(domain, ip, owner)
     with pytest.raises(TimeoutError):
-        webapp.is_close_to_expire()
+        webapp = Webapp(domain, ip, owner)
 
 
 def test_create_cert():

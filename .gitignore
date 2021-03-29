@@ -3,8 +3,8 @@ letsencrypt/keys/
 letsencrypt/renewal/
 __pycache__
 .pytest_cache
-.vscode
 **/cloudflare.ini
 .env*
 Dockerfile*
 .dockerignore
+.vscode

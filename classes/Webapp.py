@@ -1,5 +1,4 @@
 import re
-import OpenSSL
 import ssl
 from datetime import datetime
 
@@ -12,6 +11,7 @@ class Webapp:
         self.ip = self.validate_as_ip(ip)
         self.owner = self.validate_as_owner(owner)
         self.local_cert = Certificate(self.domain, self.owner)
+        self.webcert = ssl.get_server_certificate((self.ip, 443))
 
     def validate_as_string(self, string):
         if not isinstance(string, str):
@@ -41,11 +41,13 @@ class Webapp:
             else:
                 warning_phase = "ERROR: '{}' should be an IP"
                 raise ValueError(warning_phase.format(ip))
+            
+    def get_expiry_date(self):
+        return self.local_cert.get_expiry_date(self.webcert)
 
     def is_close_to_expire(self, limit_in_days=7):
-        webcert = ssl.get_server_certificate((self.ip, 443))
         return self.local_cert.is_close_to_expire(
-            limit_in_days=limit_in_days, cert=webcert
+            limit_in_days=limit_in_days, cert=self.webcert
             )
 
     def create_cert(self):

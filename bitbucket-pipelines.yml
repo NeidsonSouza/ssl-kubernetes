@@ -2,7 +2,7 @@ image: python:3.7-slim
 
 pipelines:
   custom:
-    create-cert:
+    list-certs:
       - step:
           caches:
             - pip
@@ -17,4 +17,4 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py
+            - python main.py --list-certs
