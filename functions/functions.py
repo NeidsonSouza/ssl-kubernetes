@@ -21,7 +21,7 @@ def raise_error_if_not_created(domains):
     for domain in domains:
         if not Certificate(domain.name, domain.owner).exists():
             raise FileNotFoundError(
-                "ERROR: the {} certificate was not created"
+                "ERROR: the {} certificate was not created".format(domain)
             )
     git_add_commit_push()
 
