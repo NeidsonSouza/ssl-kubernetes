@@ -1,6 +1,8 @@
 from main import main
 from classes.Certificate import Certificate
 from functions.functions import get_cert_before_creation
+from functions.functions import raise_error_if_not_created
+from classes.File import File
 import os
 import pytest
 
@@ -67,4 +69,12 @@ def test_upgrade_repository_certs(cert_before_creation):
     assert cert_before_creation.exists() == True
     assert cert_before_creation.is_close_to_expire() == False
 
-# testar domains thar fail
+
+def test_raise_error_if_not_created(cert_before_creation):
+    domain = "wiserpv.com"
+    ip = "1.1.1.1"
+    owner = "cloudflare"
+    os.system("echo '{},{},{}' > domains".format(domain, ip, owner))
+    domains = File('domains').get_content_as_list_of_class()
+    with pytest.raises(FileNotFoundError):
+        raise_error_if_not_created(domains)

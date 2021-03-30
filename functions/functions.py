@@ -14,6 +14,15 @@ def upgrade_repository_certs():
                 local_cert.create()
             elif local_cert.is_close_to_expire():
                 local_cert.create()
+    raise_error_if_not_created(domains)
+
+
+def raise_error_if_not_created(domains):
+    for domain in domains:
+        if not Certificate(domain.name, domain.owner).exists():
+            raise FileNotFoundError(
+                "ERROR: the {} certificate was not created"
+            )
 
 
 def get_cert_before_creation(cert):
