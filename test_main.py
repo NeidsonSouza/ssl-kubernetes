@@ -1,4 +1,6 @@
 from main import main
+from classes.Certificate import Certificate
+from functions.functions import get_cert_before_creation
 import os
 import pytest
 
@@ -15,12 +17,12 @@ buzzclub.com.br,34.107.249.226,cloudflare' > domains
 """
     )
     expected = """\
-{:20} - Expiry date: {}
-{:20} - Expiry date: {}
-{:20} - Expiry date: {}
-{:20} - Expiry date: {}
-{:20} - Expiry date: {}
-{:20} - Expiry date: {}
+{:20} -> Expiry date: {}
+{:20} -> Expiry date: {}
+{:20} -> Expiry date: {}
+{:20} -> Expiry date: {}
+{:20} -> Expiry date: {}
+{:20} -> Expiry date: {}
 """.format(
         'powerhouse.pro', 'November 26 2019 - 21:15:02',
         'wiseup.com', 'April 06 2020 - 03:12:36',
@@ -36,10 +38,33 @@ buzzclub.com.br,34.107.249.226,cloudflare' > domains
     assert captured.out == expected
 
 
+def test_more_flags_raise_error():
+    sys_argv = ['main.py', '--list-certs', '--any-flag']
+    with pytest.raises(ValueError):
+        main(sys_argv)
 
 
+def test_more_than_one_arg_main():
+    sys_argv = ['main.py', '--list-certs']
+    with pytest.raises(TypeError):
+        main(sys_argv, 0)
 
 
+@pytest.fixture
+def cert_before_creation():
+    cert = Certificate('wiserpv.com', 'cloudflare')
+    return get_cert_before_creation(cert)
 
-    # criar test passando mais de um argumento
-    # criar testes passando mais de um paramentro para a função man
+
+def test_upgrade_repository_certs(cert_before_creation):
+    # Creating fake data
+    domain = "wiserpv.com"
+    ip = "34.95.76.197"
+    owner = "cloudflare"
+    os.system("echo '{},{},{}' > domains".format(domain, ip, owner))
+    sys_argv = ['main.py', '--upgrade-repository-certs']
+    main(sys_argv)
+    assert cert_before_creation.exists() == True
+    assert cert_before_creation.is_close_to_expire() == False
+
+# testar domains thar fail
