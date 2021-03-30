@@ -23,6 +23,13 @@ def raise_error_if_not_created(domains):
             raise FileNotFoundError(
                 "ERROR: the {} certificate was not created"
             )
+    git_add_commit_push()
+
+
+def git_add_commit_push():
+    os.system(
+        "git add *.pem && git commit -m'[skip ci] Adding certs' && git push"
+    )
 
 
 def get_cert_before_creation(cert):
