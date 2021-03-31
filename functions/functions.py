@@ -14,7 +14,14 @@ def upgrade_repository_certs():
                 local_cert.create()
             elif local_cert.is_close_to_expire():
                 local_cert.create()
+    git_add_commit_push()
     raise_error_if_not_created(domains)
+
+
+def git_add_commit_push():
+    os.system(
+        "git add *.pem && git commit -m'[skip ci] Adding certs' && git push"
+    )
 
 
 def raise_error_if_not_created(domains):
@@ -23,13 +30,6 @@ def raise_error_if_not_created(domains):
             raise FileNotFoundError(
                 "ERROR: the {} certificate was not created".format(domain)
             )
-    git_add_commit_push()
-
-
-def git_add_commit_push():
-    os.system(
-        "git add *.pem && git commit -m'[skip ci] Adding certs' && git push"
-    )
 
 
 def get_cert_before_creation(cert):
