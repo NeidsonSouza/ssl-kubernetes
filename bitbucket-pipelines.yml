@@ -36,9 +36,9 @@ pipelines:
             # Running main code
             - python main.py --upgrade-repository-certs
 
-    upgrade-repository-certs-to-homolog:
+    upgrade-repository-certs-to-production:
       - step:
-          deployment: homolog
+          deployment: production
           caches:
             - pip
           name: Main script
