@@ -35,3 +35,21 @@ pipelines:
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
             - python main.py --upgrade-repository-certs
+
+    upgrade-repository-certs-to-homolog:
+      - step:
+          deployment: homolog
+          caches:
+            - pip
+          name: Main script
+          script:
+            # Installing dependencies
+            - apt update
+            - apt install -y certbot=0.31.0-1+deb10u1 git
+            - pip install -r requirements.txt
+            # Managing files
+            - rm -r /etc/letsencrypt/
+            - ln -s $(pwd)/letsencrypt/ /etc/
+            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
+            # Running main code
+            - python main.py --upgrade-repository-certs
