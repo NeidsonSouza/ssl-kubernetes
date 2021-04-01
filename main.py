@@ -2,6 +2,7 @@ import sys
 from functions.functions import raise_error
 from functions.functions import list_certs
 from functions.functions import upgrade_repository_certs
+from functions.functions import upgrade_certs_gcp
 
 
 def main(flag):
@@ -11,8 +12,8 @@ def main(flag):
         list_certs()
     elif flag[1] == '--upgrade-repository-certs':
         upgrade_repository_certs()
-    elif flag[1] == '--upgrade-certs-prod':
-        pass
+    elif flag[1] == '--upgrade-certs-gcp':
+        upgrade_certs_gcp()
     else:
         raise_error()
 

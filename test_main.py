@@ -2,6 +2,7 @@ from main import main
 from classes.Certificate import Certificate
 from functions.functions import get_cert_before_creation
 from functions.functions import raise_error_if_not_created
+from functions.functions import upgrade_certs_gcp
 from classes.File import File
 import os
 import pytest
@@ -78,3 +79,21 @@ def test_raise_error_if_not_created(cert_before_creation):
     domains = File('domains').get_content_as_list_of_class()
     with pytest.raises(FileNotFoundError):
         raise_error_if_not_created(domains)
+
+
+def test_upgrade_certs_gcp(cert_before_creation):
+    domain = "wiserpv.com"
+    ip = "34.120.69.210"
+    owner = "cloudflare"
+    os.system("echo '{},{},{}' > domains".format(domain, ip, owner))
+
+    cert_before_creation.create()
+    upgrade_certs_gcp()
+    pem_files = ['cert.pem', 'chain.pem', 'fullchain.pem', 'privkey.pem']
+    pem_files_flag = [
+        os.path.exists('metadata/{}/{}'.format(
+            cert_before_creation.domain, each_file
+        ))
+        for each_file in pem_files
+    ]
+    assert all(pem_files_flag)

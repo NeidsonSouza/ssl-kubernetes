@@ -2,6 +2,7 @@ import os
 from classes.File import File
 from classes.Webapp import Webapp
 from classes.Certificate import Certificate
+from shutil import copyfile
 
 
 def upgrade_repository_certs():
@@ -53,7 +54,7 @@ Flags available:
 
 --list-certs: only list certs and their expiry dates
 --upgrade-repository-certs: upgrade certs only in repository (not in production)
---upgrade-certs-prod: upgrade certs in production (BE CAREFULL !!!)
+--upgrade-certs-gcp: upgrade certs in production (BE CAREFULL !!!)
 """
     )
 
@@ -74,3 +75,32 @@ def list_certs():
                 domain[0], domain[1].strftime("%B %d %Y - %H:%M:%S")
             )
         )
+
+
+def upgrade_certs_gcp():
+    domains = File('domains').get_content_as_list_of_class()
+    for domain in domains:
+        web_cert = Webapp(domain.name, domain.ip, domain.owner)
+        local_cert = Certificate(domain.name, domain.owner)
+        if web_cert.is_close_to_expire():
+            if not local_cert.exists() or local_cert.is_close_to_expire():
+                pass  # raise
+            else:
+                metadata_dir = 'metadata/{}'.format(local_cert.domain)
+                make_dir(metadata_dir, local_cert)
+                __update_infra()
+
+def make_dir(metadata_dir, local_cert):
+    if not os.path.exists(metadata_dir):
+        os.makedirs(metadata_dir)
+        pem_files = [
+            'cert.pem', 'chain.pem', 'fullchain.pem', 'privkey.pem'
+        ]
+        for single_file in pem_files:
+            copyfile(
+                '{}/{}'.format(local_cert.live_dir, single_file),
+                '{}/{}'.format(metadata_dir, single_file)
+            )
+    
+def __update_infra():
+    pass
