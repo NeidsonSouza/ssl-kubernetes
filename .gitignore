@@ -9,3 +9,4 @@ Dockerfile*
 .dockerignore
 .vscode
 *.pyc
+*.egg-info
