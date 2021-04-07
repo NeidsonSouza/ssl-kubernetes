@@ -17,7 +17,7 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python sslautomation/runner.py --list-certs
+            - python run.py --list-certs
     upgrade-repository-certs-to-test:
       - step:
           deployment: test
