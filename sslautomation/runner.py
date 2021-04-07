@@ -25,7 +25,3 @@ def main(flag):
         automation.list_certs()
     else:
         raise_error()
-
-
-if __name__ == '__main__':
-    main(sys.argv)
