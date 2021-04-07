@@ -17,7 +17,7 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python run.py --list-certs
+            - python3 run.py --list-certs
     upgrade-repository-certs-to-test:
       - step:
           deployment: test
@@ -34,7 +34,7 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py --upgrade-repository-certs
+            - python3 main.py --upgrade-repository-certs
 
     upgrade-repository-certs-to-production:
       - step:
@@ -52,4 +52,4 @@ pipelines:
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py --upgrade-repository-certs
+            - python3 main.py --upgrade-repository-certs
