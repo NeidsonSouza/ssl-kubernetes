@@ -1,4 +1,4 @@
-image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+# image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
 
 pipelines:
   custom:
