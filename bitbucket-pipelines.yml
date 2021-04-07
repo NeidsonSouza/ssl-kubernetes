@@ -3,6 +3,7 @@ image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
 pipelines:
   custom:
     list-certs:
+      - image: python:3.7-slim
       - step:
           caches:
             - pip
