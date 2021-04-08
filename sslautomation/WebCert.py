@@ -19,5 +19,5 @@ class WebCert(Certificate):
     def get_expiry_date(self):
         return super().get_expiry_date(self.web_cert)
     
-    def is_close_to_expiring(self):
-        return super().is_close_to_expiring(self.web_cert)
+    def is_close_to_expiring(self, limit_in_days=7):
+        return super().is_close_to_expiring(self.web_cert, limit_in_days=7)
