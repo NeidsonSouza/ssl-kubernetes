@@ -7,6 +7,11 @@ def test_main():
     main(sys_argv)
     
     
+def test_main():
+    sys_argv = ['runner.py', '--upgrade-repository-certs']
+    main(sys_argv)
+    
+    
 def test_main_missing_flag():
     with pytest.raises(ValueError):
         sys_argv = ['runner.py']
@@ -21,5 +26,5 @@ def test_main_wrong_flag():
     
 def test_main_extra_flag():
     with pytest.raises(ValueError):
-        sys_argv = ['runner.py', '--list-certs', 'anyflag']
+        sys_argv = ['runner.py', '--list-certs', '--anyflag']
         main(sys_argv)
