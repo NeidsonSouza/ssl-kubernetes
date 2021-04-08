@@ -1,6 +1,6 @@
 import os
 import pytest
-from sslautomation import Automation, Domains
+from sslautomation import AutomationListCerts, Domains
 from sslautomation.runner import main
 from helpers import ROOT_DIR, CSV_FILE, domains, local_cert
 
@@ -17,7 +17,7 @@ def test_main_list_certs(domains, capsys):
 def test_list_certs_csv_head_only(capsys):
     os.system("echo 'secret,domain,IP,domain_manager' > {}".format(CSV_FILE))
     domains = Domains(CSV_FILE)
-    Automation(domains).list_certs()
+    AutomationListCerts(domains).list_certs()
     output = capsys.readouterr()
     assert len(output.out.splitlines()) == 0
     
