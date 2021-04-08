@@ -7,7 +7,10 @@ class AutomationUpgradeCerts:
         if len(domains) > 0:
             self.domains = domains
         else:
-            raise SystemExit('WARNING: {} empty'.format(domains))
+            print ('WARNING: {}/data/domains.csv empty'.format(os.getenv(
+                'ROOT_DIR'
+            )))
+            exit(0)
             
     def upgrade_repository_certs(self):
         expired_web_domains = self._get_domain_expired_in_web()

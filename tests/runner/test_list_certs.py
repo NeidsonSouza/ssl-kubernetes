@@ -22,11 +22,6 @@ def test_list_certs_csv_head_only(capsys):
     assert len(output.out.splitlines()) == 0
     
     
-def test_main_upgrade_repository_certs():
-    sys_argv = ['runner.py', '--upgrade-repository-certs']
-    main(sys_argv)
-    
-    
 def test_main_missing_flag():
     with pytest.raises(ValueError):
         sys_argv = ['runner.py']

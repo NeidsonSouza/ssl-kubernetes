@@ -11,12 +11,18 @@ def create_domains_csv(domain, ip, secret='xxx'):
 echo 'secret,domain,IP,domain_manager
 {},{},{},{}
 ' > {}""".format(secret, domain, ip, domain_manager, CSV_FILE))
-    
+
+
+def test_main_upgrade_repository_certs(local_cert):
+    create_domains_csv(domain="wiserpv.com", ip='1.1.1.1')
+    sys_argv = ['runner.py', '--upgrade-repository-certs']
+    main(sys_argv)
+
 
 def test_init():
     os.system("echo 'secret,domain,IP,domain_manager' > {}".format(CSV_FILE))
     domains = Domains(CSV_FILE)
-    with pytest.raises(SystemExit, match=r"^WARNING.*empty$"):
+    with pytest.raises(SystemExit):
         AutomationUpgradeCerts(domains)
 
     
