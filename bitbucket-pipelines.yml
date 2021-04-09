@@ -1,9 +1,8 @@
-image: python:3.7-slim
-
 pipelines:
   custom:
     list-certs:
       - step:
+          image: python:3.7-slim
           caches:
             - pip
           name: Main script
@@ -11,15 +10,18 @@ pipelines:
             # Installing dependencies
             - apt update
             - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install -r requirements.txt
+            - pip install .
             # Managing files
             - rm -r /etc/letsencrypt/
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py --list-certs
+            - export ROOT_DIR=$(pwd)
+            - python run.py --list-certs
+
     upgrade-repository-certs-to-test:
       - step:
+          image: python:3.7-slim
           deployment: test
           caches:
             - pip
@@ -28,16 +30,18 @@ pipelines:
             # Installing dependencies
             - apt update
             - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install -r requirements.txt
+            - pip install .
             # Managing files
             - rm -r /etc/letsencrypt/
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py --upgrade-repository-certs
+            - export ROOT_DIR=$(pwd)
+            - python run.py --upgrade-repository-certs
 
     upgrade-repository-certs-to-production:
       - step:
+          image: python:3.7-slim
           deployment: production
           caches:
             - pip
@@ -46,10 +50,11 @@ pipelines:
             # Installing dependencies
             - apt update
             - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install -r requirements.txt
+            - pip install .
             # Managing files
             - rm -r /etc/letsencrypt/
             - ln -s $(pwd)/letsencrypt/ /etc/
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
-            - python main.py --upgrade-repository-certs
+            - export ROOT_DIR=$(pwd)
+            - python run.py --upgrade-repository-certs
