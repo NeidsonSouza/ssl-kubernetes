@@ -9,7 +9,6 @@ pipelines:
           script:
             # Installing dependencies
             - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
             - pip install .
             # Managing files
             - rm -r /etc/letsencrypt/
@@ -17,7 +16,7 @@ pipelines:
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
             - export ROOT_DIR=$(pwd)
-            - python run.py --list-certs
+            - python3 run.py --list-certs
 
     upgrade-repository-certs-to-test:
       - step:
@@ -37,7 +36,7 @@ pipelines:
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
             - export ROOT_DIR=$(pwd)
-            - python run.py --upgrade-repository-certs
+            - python3 run.py --upgrade-repository-certs
 
     upgrade-repository-certs-to-production:
       - step:
@@ -57,4 +56,28 @@ pipelines:
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
             - export ROOT_DIR=$(pwd)
-            - python run.py --upgrade-repository-certs
+            - python3 run.py --upgrade-repository-certs
+
+    upgrade-proxy-to-production:
+      - step:
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+          deployment: production
+          caches:
+            - pip
+          name: Main script
+          script:
+            # Installing dependencies
+            - apt update
+            - pip install .
+            # Managing files
+            - rm -r /etc/letsencrypt/
+            - ln -s $(pwd)/letsencrypt/ /etc/
+            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
+            # Cofiguring gcloud
+            - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
+            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+            - gcloud config set project $GCLOUD_PROJECT
+            - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
+            # Running main code
+            - export ROOT_DIR=$(pwd)
+            - python3 run.py --upgrade-proxy-prod
