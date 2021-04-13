@@ -10,10 +10,6 @@ pipelines:
             # Installing dependencies
             - apt update
             - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             # Running main code
             - export ROOT_DIR=$(pwd)
             - python3 run.py --list-certs
