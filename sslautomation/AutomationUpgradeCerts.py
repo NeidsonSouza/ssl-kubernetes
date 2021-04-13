@@ -49,7 +49,7 @@ class AutomationUpgradeCerts:
     def _git_add_commit_push(self):
         os.system(
             "git add *.pem && "\
-            "git commit -m'[skip ci] Certs added $(date)' && "\
+            "git commit -m'[skip ci] Certs added' && "\
             "git push"
         )
         
