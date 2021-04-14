@@ -75,16 +75,6 @@ def test_upgrade_proxy_if_local_non_existe():
            '--key {0}/letsencrypt/live/wiserpv.com/privkey.pem '\
            '--cert {0}/letsencrypt/live/wiserpv.com/fullchain.pem'.format(ROOT_DIR)
     print('Not expected:\n' + text_del + '\n' + text_create)
-    
-    
-def test_raise_erro_if_not_upgraded():
-    create_domains_csv(
-        domain="wiserpv.com", ip='34.95.76.197', secret='wiserpv-certificate'
-    )
-    domains = Domains(CSV_FILE)
-    auto = AutomationUpgradeProxy(domains)
-    print('Deve aparecer um erro!')
-    auto.upgrade_proxy()
 
 
 def test_main_upgrade_repository_certs():
@@ -96,7 +86,6 @@ def test_main_upgrade_repository_certs():
 
 def main():
     test_upgrade_proxy_if_expiring()
-    test_raise_erro_if_not_upgraded()
     test_init()
     test_main_upgrade_repository_certs()
     test_upgrade_proxy_if_not_expiring()

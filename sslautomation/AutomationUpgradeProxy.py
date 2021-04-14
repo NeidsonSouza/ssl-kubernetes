@@ -18,7 +18,6 @@ class AutomationUpgradeProxy:
             expiring_web_domains
         )
         self._upgrade_each_proxy(proxy_to_be_upgraded)
-        self._raise_erro_if_not_upgraded()
 
     def _get_domain_expired_in_web(self, domains=None):
         if domains == None: domains = self.domains
@@ -56,9 +55,3 @@ class AutomationUpgradeProxy:
             os.system(full_del_cmd)
             print(full_create_cmd)
             os.system(full_create_cmd)
-            
-    def _raise_erro_if_not_upgraded(self):
-        proxy_not_upgraded = self._get_domain_expired_in_web()
-        assert proxy_not_upgraded == [], "Domains not upgraded: {}".format(
-            [domain for domain in self.domains]
-        )
