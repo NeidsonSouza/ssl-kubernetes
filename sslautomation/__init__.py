@@ -5,4 +5,5 @@ from .Domains import Domains
 from .AutomationListCerts import AutomationListCerts
 from .AutomationUpgradeCerts import AutomationUpgradeCerts
 from .AutomationUpgradeProxy import AutomationUpgradeProxy
+from .Repository import Repository
 from .runner import main

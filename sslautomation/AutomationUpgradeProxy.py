@@ -13,11 +13,18 @@ class AutomationUpgradeProxy:
             exit(0)
 
     def upgrade_proxy(self):
+        print('Checking if any proxy at GKE cluster need to be upgraded...')
         expiring_web_domains = self._get_domain_expired_in_web()
-        proxy_to_be_upgraded = self._get_proxy_to_be_upgraded(
-            expiring_web_domains
-        )
-        self._upgrade_each_proxy(proxy_to_be_upgraded)
+        if len(expiring_web_domains) > 0:
+            print('Secrets to be upgraded: {}'.format(
+                [domain['secret'] for domain in expiring_web_domains]
+            ))
+            proxy_to_be_upgraded = self._get_proxy_to_be_upgraded(
+                expiring_web_domains
+            )
+            self._upgrade_each_proxy(proxy_to_be_upgraded)
+        else:
+            print('No proxy upgraded')
 
     def _get_domain_expired_in_web(self, domains=None):
         if domains == None: domains = self.domains
