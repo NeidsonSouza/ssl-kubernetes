@@ -1,6 +1,8 @@
 # FROM python:3.7-slim
 FROM gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
 
+ENV ROOT_DIR=/app
+
 RUN apt update && \
     apt install -y certbot=0.31.0-1+deb10u1 git
 
