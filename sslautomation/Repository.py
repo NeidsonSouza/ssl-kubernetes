@@ -22,7 +22,7 @@ class Repository:
             dst = '{}/letsencrypt/{}'.format(self.ROOT_DIR, folder)
             print('Deleting {}...'.format(dst))
             shutil.rmtree(dst)
-            print('Creating symlink: {} -> {}'.format(src, dst))
+            print('Creating symlink: {} -> {}'.format(dst, src))
             os.symlink(src, dst)
 
     def push(self):

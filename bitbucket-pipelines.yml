@@ -1,95 +1,58 @@
+options:
+  #max-time: 5 # minutes
+  docker: true
+
 pipelines:
   custom:
-    list-certs:
-      - step:
-          image: python:3.7-slim
-          caches:
-            - pip
-          name: Main script
-          script:
-            # Installing dependencies
-            - apt update
-            - pip install .
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python3 run.py --list-certs
-
-    upgrade-repository-certs-to-test:
-      - step:
-          image: python:3.7-slim
-          deployment: test
-          caches:
-            - pip
-          name: Main script
-          script:
-            # Installing dependencies
-            - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python3 run.py --upgrade-repository-certs
-
-    upgrade-repository-certs-to-production:
-      - step:
-          image: python:3.7-slim
-          deployment: production
-          caches:
-            - pip
-          name: Main script
-          script:
-            # Installing dependencies
-            - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python3 run.py --upgrade-repository-certs
-
     upgrade-proxy-to-test:
       - step:
           image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+          name: Deploy to GCP
           deployment: test
           caches:
-            - pip
+            - docker
           name: Main script
           script:
-            # Installing dependencies
-            - apt update
-            - pip install .
-            # Cofiguring gcloud
+            # SETUP
+            - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
             - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
             - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
             - gcloud config set project $GCLOUD_PROJECT
+            - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_TEST --zone=$GCLOUD_ZONE_TEST --project $GCLOUD_PROJECT
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python3 run.py --upgrade-proxy-prod
+            # BUILD IMAGE
+            - printenv > .env
+            - cat .env
+            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
+            - docker build . -t $IMAGE_NAME
+            # PUBLISH IMAGE
+            - docker push $IMAGE_NAME
+            # DEPLOYMENT
+            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
+            - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
 
-    upgrade-proxy-to-production:
+  branches:
+    master:
       - step:
           image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+          name: Deploy to GCP
           deployment: production
           caches:
-            - pip
-          name: Main script
+            - docker
           script:
-            # Installing dependencies
-            - apt update
-            - pip install .
-            # Cofiguring gcloud
+            # SETUP
+            - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
             - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
             - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
             - gcloud config set project $GCLOUD_PROJECT
+            - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python3 run.py --upgrade-proxy-prod
+            # BUILD IMAGE
+            - printenv > .env
+            - cat .env
+            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
+            - docker build . -t $IMAGE_NAME
+            # PUBLISH IMAGE
+            - docker push $IMAGE_NAME
+            # DEPLOYMENT
+            - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
