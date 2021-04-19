@@ -5,7 +5,6 @@ __pycache__
 .pytest_cache
 **/cloudflare.ini
 .env*
-Dockerfile*
 .dockerignore
 .vscode
 *.pyc
