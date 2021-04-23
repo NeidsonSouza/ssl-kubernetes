@@ -27,7 +27,6 @@ pipelines:
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
             # DEPLOYMENT
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
 
   branches:
