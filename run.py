@@ -12,6 +12,7 @@ if __name__ == '__main__':
         'array':
             [
                 {
+                    'is_expired': False,
                     '5_days_or_less_to_expiry': True,
                     'runtime': '2012-04-23T18:25:43.511Z',
                     'domain': 'meusucesso.com',
@@ -19,6 +20,7 @@ if __name__ == '__main__':
                     'was_cert_replaced': True
                 },
                 {
+                    'is_expired': True,
                     '5_days_or_less_to_expiry': True,
                     'runtime': '2012-04-23T18:25:43.511Z',
                     'domain': 'wiseup.com',
@@ -26,6 +28,7 @@ if __name__ == '__main__':
                     'was_cert_replaced': False
                 },
                 {
+                    'is_expired': False,
                     '5_days_or_less_to_expiry': False,
                     'runtime': '2012-04-23T18:25:43.511Z',
                     'domain': 'powerhouse.pro',
