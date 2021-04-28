@@ -19,38 +19,12 @@ def main():
     repo.create_symlink()
     dates = AutomationListCerts(domains).list_certs()
     AutomationUpgradeCerts(domains).upgrade_repository_certs()
-    print(json.dumps(dates))
-    # repo.push()
-    # AutomationUpgradeProxy(domains).upgrade_proxy()
-    
-    
-    # import json
-    # data = {
-    #     'array':
-    #         [
-    #             {
-    #                 'domain': 'meusucesso.com',
-    #                 'expiry_date': '2021-06-23T18:25:43.511Z',
-    #                 '5_days_or_less_to_expiry': True,
-    #                 'is_expired': False,
-    #                 'was_cert_replaced': True
-    #             },
-    #             {
-    #                 'domain': 'wiseup.com',
-    #                 'expiry_date': '2020-05-11T17:19:43.511Z',
-    #                 '5_days_or_less_to_expiry': True,
-    #                 'is_expired': True,
-    #                 'was_cert_replaced': False
-    #             },
-    #             {
-    #                 'domain': 'powerhouse.pro',
-    #                 'expiry_date': '2022-11-02T15:25:08.511Z',
-    #                 '5_days_or_less_to_expiry': False,
-    #                 'is_expired': False,
-    #                 'was_cert_replaced': True
-    #             }
-    #         ]
-    # }
-
-    # app_json = json.dumps(data)
-    # print(app_json)
+    repo.push()
+    replaced_certs = AutomationUpgradeProxy(domains).upgrade_proxy()
+    join_dict = [
+        {**dic_date, **dic_secret}
+        for dic_date, dic_secret in zip(dates, replaced_certs)
+    ]
+    final_dict = {'array': join_dict}
+    json_payload = json.dumps(final_dict)
+    print(json_payload)

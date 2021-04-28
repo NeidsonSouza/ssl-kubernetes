@@ -25,6 +25,25 @@ class AutomationUpgradeProxy:
             self._upgrade_each_proxy(proxy_to_be_upgraded)
         else:
             print('No proxy upgraded')
+            return [
+                {'domain': domain['domain'], 'was_cert_replaced': False}
+                for domain in self.domains
+            ]
+        return self.__get_final_list(proxy_to_be_upgraded)
+    
+    def __get_final_list(self, proxy_to_be_upgraded):
+        replaced_secrets = [domain['secret'] for domain in proxy_to_be_upgraded]
+        final_list = []
+        for domain in self.domains:
+            if domain['secret'] in replaced_secrets:
+                final_list.append(
+                    {'domain': domain['domain'], 'was_cert_replaced': True}
+                )
+            else:
+                final_list.append(
+                    {'domain': domain['domain'], 'was_cert_replaced': False}
+                )
+        return final_list
 
     def _get_domain_expired_in_web(self, domains=None):
         if domains == None: domains = self.domains

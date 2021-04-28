@@ -11,7 +11,6 @@ pipelines:
           deployment: test
           caches:
             - docker
-          name: Main script
           script:
             # SETUP
             - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
