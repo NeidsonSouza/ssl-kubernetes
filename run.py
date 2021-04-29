@@ -1,5 +1,14 @@
 from sslautomation import main
-import os
 
 if __name__ == '__main__':
-    main()
+    # main()
+    
+    
+    
+    
+    
+    
+    
+    import os
+    os.system('gcloud info')
+    os.system('kubectl get secret')

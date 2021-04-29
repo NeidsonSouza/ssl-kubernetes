@@ -79,5 +79,4 @@ class AutomationUpgradeProxy:
             )
             cmd = '{} && {}'.format(full_del_cmd, full_create_cmd)
             print(cmd)
-            # os.system(cmd)
-            os.system('gcloud info')
+            os.system(cmd)
