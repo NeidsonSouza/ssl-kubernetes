@@ -81,4 +81,4 @@ class AutomationUpgradeProxy:
             print(cmd)
             os.system(cmd)
             os.system('ls')
-            os.system('kubectl get secret')
+            os.system('kubectl --help')
