@@ -13,6 +13,7 @@ pipelines:
             - docker
           script:
             # SETUP
+            - gcloud components install kubectl --quiet
             - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
             - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
             - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
@@ -40,6 +41,7 @@ pipelines:
             - docker
           script:
             # SETUP
+            - gcloud components install kubectl --quiet
             - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
             - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
             - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
