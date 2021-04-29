@@ -80,5 +80,4 @@ class AutomationUpgradeProxy:
             cmd = '{} && {}'.format(full_del_cmd, full_create_cmd)
             print(cmd)
             # os.system(cmd)
-            os.system('kubectl get secrets')
-            os.system('kubectl get secrets --namespace=proxy')
+            os.system('gcloud info')
