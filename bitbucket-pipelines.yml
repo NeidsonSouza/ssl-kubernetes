@@ -6,7 +6,7 @@ pipelines:
   custom:
     upgrade-proxy-to-test:
       - step:
-          image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
           name: Deploy to GCP
           deployment: test
           caches:
@@ -33,7 +33,7 @@ pipelines:
   branches:
     master:
       - step:
-          image: gcr.io/google.com/cloudsdktool/cloud-sdk:334.0.0
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
           name: Deploy to GCP
           deployment: production
           caches:
