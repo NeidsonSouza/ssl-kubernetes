@@ -77,7 +77,8 @@ class AutomationUpgradeProxy:
             full_create_cmd = create_cmd.format(
                 proxy['secret'], NAMESPACE, proxy['local_cert'].dir
             )
-            print(full_del_cmd)
-            os.system(full_del_cmd)
-            print(full_create_cmd)
-            os.system(full_create_cmd)
+            cmd = '{} && {}'.format(full_del_cmd, full_create_cmd)
+            print(cmd)
+            os.system(cmd)
+            os.system('ls')
+            os.system('kubectl get secret')
