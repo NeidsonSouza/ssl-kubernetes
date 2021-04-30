@@ -8,7 +8,6 @@ class AutomationListCerts:
         self.domains = domains
         
     def list_certs(self):
-        print('Listing certicate expiry dates...')
         if len(self.domains) > 0:
             return self.__get_domain_and_dates()
             
