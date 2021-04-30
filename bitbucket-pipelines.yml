@@ -21,7 +21,6 @@ pipelines:
             - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_TEST --zone=$GCLOUD_ZONE_TEST --project $GCLOUD_PROJECT
             # BUILD IMAGE
-            - printenv > .env
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
@@ -49,7 +48,6 @@ pipelines:
             - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
             # BUILD IMAGE
-            - printenv > .env
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - docker build . -t $IMAGE_NAME
             # PUBLISH IMAGE
