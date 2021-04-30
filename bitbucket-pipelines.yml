@@ -22,7 +22,7 @@ pipelines:
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_TEST --zone=$GCLOUD_ZONE_TEST --project $GCLOUD_PROJECT
             # BUILD IMAGE
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            - chmod 600 letsencrypt/cloudflare.in
+            - chmod 600 letsencrypt/cloudflare.ini
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
             - docker build . -t $IMAGE_NAME
