@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip3 install --upgrade pip \
+RUN pip3 install --upgrade pip && \
     pip install .
 RUN rm -r /etc/letsencrypt/
 RUN ln -s $(pwd)/letsencrypt/ /etc/
