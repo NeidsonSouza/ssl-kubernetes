@@ -50,7 +50,7 @@ pipelines:
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
             # BUILD IMAGE
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            - chmod 600 letsencrypt/cloudflare.in
+            - chmod 600 letsencrypt/cloudflare.ini
             - docker build . -t $IMAGE_NAME
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
