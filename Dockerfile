@@ -2,9 +2,8 @@ FROM gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-slim
 
 ENV ROOT_DIR=/app
 
-RUN gcloud components install kubectl --quiet
 RUN apt update && \
-    apt install -y certbot=0.31.0-1+deb10u1
+    apt install -y certbot=0.31.0-1+deb10u1 kubectl
 
 WORKDIR /app
 
