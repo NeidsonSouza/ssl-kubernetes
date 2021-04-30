@@ -79,4 +79,5 @@ class AutomationUpgradeProxy:
             )
             cmd = '{} && {}'.format(full_del_cmd, full_create_cmd)
             print(cmd)
-            os.system(cmd)
+            if os.popen(cmd).read() == '':
+                raise Exception("Command '{}' Didn't work".format(cmd))
