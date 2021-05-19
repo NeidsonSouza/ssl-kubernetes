@@ -27,6 +27,7 @@ pipelines:
             - echo '[default]' > letsencrypt/aws-config
             - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> letsencrypt/aws-config
             - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> letsencrypt/aws-config
+            - cat letsencrypt/aws-config
             # SET DATA FOR TESTS
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
@@ -61,6 +62,7 @@ pipelines:
             - echo '[default]' > letsencrypt/aws-config
             - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> letsencrypt/aws-config
             - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> letsencrypt/aws-config
+            - cat letsencrypt/aws-config
             # BUILD IMAGE
             - docker build . -t $IMAGE_NAME
             # PUBLISH IMAGE
