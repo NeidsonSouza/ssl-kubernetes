@@ -20,11 +20,17 @@ pipelines:
             - gcloud config set project $GCLOUD_PROJECT
             - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_TEST --zone=$GCLOUD_ZONE_TEST --project $GCLOUD_PROJECT
-            # BUILD IMAGE
+            # CLOUDFLARE CONFIG FILE
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - chmod 600 letsencrypt/cloudflare.ini
+            # AWS CONFIG FILE
+            - echo '[default]' > letsencrypt/aws-config
+            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> letsencrypt/aws-config
+            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> letsencrypt/aws-config
+            # SET DATA FOR TESTS
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
+            # BUILD IMAGE
             - docker build . -t $IMAGE_NAME
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
@@ -48,9 +54,14 @@ pipelines:
             - gcloud config set project $GCLOUD_PROJECT
             - gcloud auth configure-docker --quiet
             - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
-            # BUILD IMAGE
+            # CLOUDFLARE CONFIG FILE
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - chmod 600 letsencrypt/cloudflare.ini
+            # AWS CONFIG FILE
+            - echo '[default]' > letsencrypt/aws-config
+            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> letsencrypt/aws-config
+            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> letsencrypt/aws-config
+            # BUILD IMAGE
             - docker build . -t $IMAGE_NAME
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
