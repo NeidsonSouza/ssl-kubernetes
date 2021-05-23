@@ -46,14 +46,15 @@ class LocalCert(Certificate):
                 --dns-route53 \
                 --agree-tos \
                 -d {0},*.{0}""".format(self.domain)
+        else:
+            raise ValueError("ERROR: {} not found in rules. It shoud be 'aws' or 'cloudflare'")
+        
         print("'{}' hosted on {}".format(self.domain, self.domain_manager.upper()))
         print(command)
         output = os.popen(command)
         print(output.read())
-        else:
-            raise ValueError("ERROR: {} not found in rules. It shoud be 'aws' or 'cloudflare'")
-        
-    
+
+
     def get_expiry_date(self):
         return super().get_expiry_date(self.__get_cert())
     
