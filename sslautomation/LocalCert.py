@@ -26,6 +26,7 @@ class LocalCert(Certificate):
         os.makedirs('/tmp/letsencrypt/{}'.format(self.domain))
         print(os.getenv('SERVER'))
         if self.domain_manager == 'cloudflare':
+            print('{} hosted on Cloudflare'.format(self.domain))
             os.system(
                 """certbot certonly \
                 --non-interactive \
@@ -38,6 +39,7 @@ class LocalCert(Certificate):
                 -d {0},*.{0}""".format(self.domain)
             )
         elif self.domain_manager == 'aws':
+            print('{} hosted on AWS'.format(self.domain))
             os.system(
                 """certbot certonly \
                 --non-interactive \
