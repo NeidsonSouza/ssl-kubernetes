@@ -30,7 +30,7 @@ class LocalCert(Certificate):
             AWS_CONFIG_FILE = os.getenv('AWS_CONFIG_FILE')
             if not os.path.isfile(AWS_CONFIG_FILE):
                 raise FileNotFoundError('{} not exists'.format(AWS_CONFIG_FILE))
-            os.system(
+            output = os.popen(
                 """certbot certonly \
                 --non-interactive \
                 --email dominios@wisereducacao.com \
@@ -41,9 +41,10 @@ class LocalCert(Certificate):
                 --agree-tos \
                 -d {0},*.{0}""".format(self.domain)
             )
+            print(output.read())
         elif self.domain_manager == 'aws':
             print('{} hosted on AWS'.format(self.domain))
-            os.system(
+            output = os.popen(
                 """certbot certonly \
                 --non-interactive \
                 --email dominios@wisereducacao.com \
@@ -52,6 +53,7 @@ class LocalCert(Certificate):
                 --agree-tos \
                 -d {0},*.{0}""".format(self.domain)
             )
+            print(output.read())
         else:
             raise ValueError("ERROR: {} not found in rules. It shoud be 'aws' or 'cloudflare'")
         
