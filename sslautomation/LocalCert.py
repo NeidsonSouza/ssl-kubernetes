@@ -26,12 +26,10 @@ class LocalCert(Certificate):
         os.makedirs('/tmp/letsencrypt/{}'.format(self.domain))
         print(os.getenv('SERVER'))
         if self.domain_manager == 'cloudflare':
-            print('{} hosted on Cloudflare'.format(self.domain))
             AWS_CONFIG_FILE = os.getenv('AWS_CONFIG_FILE')
             if not os.path.isfile(AWS_CONFIG_FILE):
                 raise FileNotFoundError('{} not exists'.format(AWS_CONFIG_FILE))
-            output = os.popen(
-                """certbot certonly \
+            command = """certbot certonly \
                 --non-interactive \
                 --email dominios@wisereducacao.com \
                 --server $SERVER \
@@ -40,20 +38,18 @@ class LocalCert(Certificate):
                 --dns-cloudflare-propagation-seconds 120 \
                 --agree-tos \
                 -d {0},*.{0}""".format(self.domain)
-            )
-            print(output.read())
         elif self.domain_manager == 'aws':
-            print('{} hosted on AWS'.format(self.domain))
-            output = os.popen(
-                """certbot certonly \
+            command = """certbot certonly \
                 --non-interactive \
                 --email dominios@wisereducacao.com \
                 --server $SERVER \
                 --dns-route53 \
                 --agree-tos \
                 -d {0},*.{0}""".format(self.domain)
-            )
-            print(output.read())
+        print("'{}' hosted on {}".format(self.domain, self.domain_manager.upper()))
+        print(command)
+        output = os.popen(command)
+        print(output.read())
         else:
             raise ValueError("ERROR: {} not found in rules. It shoud be 'aws' or 'cloudflare'")
         
