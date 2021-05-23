@@ -27,6 +27,9 @@ class LocalCert(Certificate):
         print(os.getenv('SERVER'))
         if self.domain_manager == 'cloudflare':
             print('{} hosted on Cloudflare'.format(self.domain))
+            AWS_CONFIG_FILE = os.getenv('AWS_CONFIG_FILE')
+            if not os.path.isfile(AWS_CONFIG_FILE):
+                raise FileNotFoundError('{} not exists'.format(AWS_CONFIG_FILE))
             os.system(
                 """certbot certonly \
                 --non-interactive \
