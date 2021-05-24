@@ -17,10 +17,10 @@ def main():
     repo = Repository(user, password)
     repo.clone()
     repo.create_symlink()
-    dates = AutomationListCerts(domains).list_certs()
     AutomationUpgradeCerts(domains).upgrade_repository_certs()
     repo.push()
     replaced_certs = AutomationUpgradeProxy(domains).upgrade_proxy()
+    dates = AutomationListCerts(domains).list_certs()
     join_dict = [
         {**dic_date, **dic_secret}
         for dic_date, dic_secret in zip(dates, replaced_certs)

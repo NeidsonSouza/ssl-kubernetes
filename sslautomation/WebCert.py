@@ -17,7 +17,6 @@ class WebCert(Certificate):
                       '| base64 -d'
             print(command)
             cert = os.popen(command).read()
-            print(cert)
             return cert
         except Exception as e:
             if type(e).__name__ == 'ConnectionRefusedError' or 'TimeoutError':
