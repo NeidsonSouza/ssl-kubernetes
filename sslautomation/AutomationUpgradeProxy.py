@@ -50,7 +50,7 @@ class AutomationUpgradeProxy:
         expired_web_certs = [
             domain
             for domain in domains
-            if WebCert(domain['IP']).is_close_to_expiring()            
+            if WebCert(domain['secret']).is_close_to_expiring()            
         ]
         return expired_web_certs
 

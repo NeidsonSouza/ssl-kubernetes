@@ -14,7 +14,7 @@ class AutomationListCerts:
     def __get_domain_and_dates(self):
         domain_list = []
         for domain in self.domains:
-            web_cert = WebCert(domain['IP'])
+            web_cert = WebCert(domain['secret'])
             domain_list.append(
                 {
                     'domain': domain['domain'],
