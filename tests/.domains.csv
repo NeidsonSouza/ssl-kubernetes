@@ -1,5 +1,5 @@
 secret,domain,domain_manager
 wisereducacao.com-certificate,wisereducacao.com,aws
 buzzclub.com.br-certificate,buzzclub.com.br,cloudflare
-buzzeditora.com.br-certificate,buzzeditora.com.br-certificate,cloudflare
+buzzeditora.com.br-certificate,buzzeditora.com.br,cloudflare
 wup.onl-certificate,wup.onl,aws
