@@ -12,11 +12,12 @@ class WebCert(Certificate):
     def __get_cert(self):
         try:
             # cert = ssl.get_server_certificate((self.ip, 443))
-            command = 'kubectl get secret {} '\
+            command = 'kubectl get secret {} -n proxy'\
                       '-o "jsonpath={.data[\'tls\.crt\']}" '\
                       '| base64 -d'.format(self.secret)
             print(command)
             cert = os.popen(command).read()
+            print(cert)
             return cert
         except Exception as e:
             if type(e).__name__ == 'ConnectionRefusedError' or 'TimeoutError':
