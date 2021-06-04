@@ -30,7 +30,7 @@ pipelines:
             - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> $AWS_CONFIG_FILE
             - cat $AWS_CONFIG_FILE
             # GCP SERVICE ACCOUNT
-            - cat $SERVICE_ACCOUNT > letsencrypt/$BITBUCKET_REPO_SLUG-gcp-service-account.json
+            - cat "$SERVICE_ACCOUNT" > letsencrypt/$BITBUCKET_REPO_SLUG-gcp-service-account.json
             # SET DATA FOR TESTS
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
