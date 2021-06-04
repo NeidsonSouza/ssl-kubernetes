@@ -39,6 +39,7 @@ pipelines:
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
             # DEPLOYMENT
+            - kubectl get configmap | grep "$BITBUCKET_REPO_SLUG-configmap" && kubectl delete configmap $BITBUCKET_REPO_SLUG-configmap
             - kubectl create configmap $BITBUCKET_REPO_SLUG-configmap --from-literal=SERVER=$SERVER --from-literal=AWS_CONFIG_FILE=$AWS_CONFIG_FILE
 
   branches:
