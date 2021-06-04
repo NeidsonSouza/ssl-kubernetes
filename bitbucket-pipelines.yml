@@ -36,6 +36,7 @@ pipelines:
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
             # DEPLOYMENT
+            - kubectl delete secret $BITBUCKET_REPO_SLUG-secret
             - kubectl create secret generic $BITBUCKET_REPO_SLUG-secret --from-literal=SERVICE_ACCOUNT=$SERVICE_ACCOUNT
 
   branches:
