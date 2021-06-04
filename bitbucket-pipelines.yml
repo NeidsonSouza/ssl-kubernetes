@@ -36,7 +36,7 @@ pipelines:
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
             # DEPLOYMENT
-            - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
+            - kubectl create secret generic $BITBUCKET_REPO_SLUG-secret --from-literal=SERVICE_ACCOUNT=$SERVICE_ACCOUNT
 
   branches:
     master:
