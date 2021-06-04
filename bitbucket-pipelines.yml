@@ -24,10 +24,13 @@ pipelines:
             - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
             - chmod 600 letsencrypt/cloudflare.ini
             # AWS CONFIG FILE
-            - echo '[default]' > letsencrypt/aws-config
-            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> letsencrypt/aws-config
-            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> letsencrypt/aws-config
-            - cat letsencrypt/aws-config
+            - export AWS_CONFIG_FILE=letsencrypt/aws-config
+            - echo '[default]' > $AWS_CONFIG_FILE
+            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> $AWS_CONFIG_FILE
+            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> $AWS_CONFIG_FILE
+            - cat $AWS_CONFIG_FILE
+            # GCP SERVICE ACCOUNT
+            - cat $SERVICE_ACCOUNT > letsencrypt/$BITBUCKET_REPO_SLUG-gcp-service-account.json
             # SET DATA FOR TESTS
             - cat tests/.domains.csv > data/domains.csv
             - cat data/domains.csv
@@ -36,8 +39,7 @@ pipelines:
             # PUBLISH IMAGE
             - docker push $IMAGE_NAME
             # DEPLOYMENT
-            - kubectl get secret | grep $BITBUCKET_REPO_SLUG-secret && kubectl delete secret $BITBUCKET_REPO_SLUG-secret 
-            - kubectl create secret generic $BITBUCKET_REPO_SLUG-secret --from-literal=SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+            - kubectl create configmap $BITBUCKET_REPO_SLUG-configmap --from-literal=SERVER=$SERVER --from-literal=AWS_CONFIG_FILE=$AWS_CONFIG_FILE
 
   branches:
     master:
