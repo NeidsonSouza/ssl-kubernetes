@@ -1,10 +1,17 @@
 #! /bin/sh
 
+CONFIG_DOMAINS_CSV_CLUSTER_TST(){
+    cat tests/.domains.csv > data/domains.csv
+    echo --------------------------
+    cat data/domains.csv
+}
+
 SET_VARS(){
     if [ "$DEPLOYMENT" = "test" ]; then
         echo $DEPLOYMENT
         export GCLOUD_CLUSTER=$GCLOUD_CLUSTER_TEST
         export GCLOUD_ZONE=$GCLOUD_ZONE_TEST
+        CONFIG_DOMAINS_CSV_CLUSTER_TST
     elif [ "$DEPLOYMENT" = "production" ]; then
         echo $DEPLOYMENT
         export GCLOUD_CLUSTER=$GCLOUD_CLUSTER_PROD
@@ -46,11 +53,6 @@ CONFIG_GCP_SERVICE_ACCOUNT_FILE(){
     cat $GCP_SERVICE_ACCOUNT_JSON
 }
 
-CONFIG_DOMAINS_CSV_CLUSTER_TST(){
-    cat tests/.domains.csv > data/domains.csv
-    cat data/domains.csv
-}
-
 PUBLISH_IMAGE(){
     docker build . -t $IMAGE_NAME
     docker push $IMAGE_NAME
@@ -81,7 +83,6 @@ SETUP_GCP
 CONFIG_CLOUDFLARE_AUTH_FILE
 CONFIG_AWS_AUTH_FILE
 CONFIG_GCP_SERVICE_ACCOUNT_FILE
-CONFIG_DOMAINS_CSV_CLUSTER_TST
 PUBLISH_IMAGE
 CREATE_CONFIGMAP
 SETUP_CRONJOB
