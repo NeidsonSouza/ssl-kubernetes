@@ -59,14 +59,15 @@ CREATE_CONFIGMAP(){
 }
 
 SETUP_CRONJOB(){
-    sed -i 's/REPO_NAME_TO_BE_REPLACED/'$BITBUCKET_REPO_SLUG'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/IMAGE_TO_BE_REPLACED/'$IMAGE_NAME'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/GCP_SERVICE_ACCOUNT_JSON/'$GCP_SERVICE_ACCOUNT_JSON'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/CLUSTER/'$GCLOUD_CLUSTER'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/ZONE/'$GCLOUD_ZONE'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/PROJECT_ID/'$GCLOUD_PROJECT'/g' ./ssl-certificates-cronjob.yml
-    sed -i 's/CONFIGMAP_TO_BE_REPLACED/'$CONFIGMAP_NAME'/g' ./ssl-certificates-cronjob.yml
-    cat ./ssl-certificates-cronjob.yml
+    export CRONJOB_YML=$(dirname $0)/ssl-certificates-cronjob.yml
+    sed -i 's/REPO_NAME_TO_BE_REPLACED/'$BITBUCKET_REPO_SLUG'/g' CRONJOB_YML
+    sed -i 's/IMAGE_TO_BE_REPLACED/'$IMAGE_NAME'/g' CRONJOB_YML
+    sed -i 's/GCP_SERVICE_ACCOUNT_JSON/'$GCP_SERVICE_ACCOUNT_JSON'/g' CRONJOB_YML
+    sed -i 's/CLUSTER/'$GCLOUD_CLUSTER'/g' CRONJOB_YML
+    sed -i 's/ZONE/'$GCLOUD_ZONE'/g' CRONJOB_YML
+    sed -i 's/PROJECT_ID/'$GCLOUD_PROJECT'/g' CRONJOB_YML
+    sed -i 's/CONFIGMAP_TO_BE_REPLACED/'$CONFIGMAP_NAME'/g' CRONJOB_YML
+    cat CRONJOB_YML
 }
 
 
