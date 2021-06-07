@@ -12,7 +12,7 @@ pipelines:
           caches:
             - docker
           script:
-            - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
+            - bash -x ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
 
   branches:
     master:
