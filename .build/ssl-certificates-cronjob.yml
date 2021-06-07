@@ -20,7 +20,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - gcloud auth activate-service-account --key-file=GCP_SERVICE_ACCOUNT_JSON;
+            - gcloud auth activate-service-account --key-file=letsencrypt/REPO_NAME_TO_BE_REPLACED-gcp-service-account.json;
               gcloud container clusters get-credentials CLUSTER --zone ZONE --project PROJECT_ID;
               python3 /app/run.py
             resources:
