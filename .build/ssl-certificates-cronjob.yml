@@ -16,7 +16,7 @@ spec:
         spec:
           containers:
           - name: REPO_NAME_TO_BE_REPLACED
-            image: IMAGE_TO_BE_REPLACED
+            image: us.gcr.io/PROJECT_ID/REPO_NAME_TO_BE_REPLACED:BITBUCKET_COMMIT
             args:
             - /bin/sh
             - -c
