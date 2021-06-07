@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: REPO_NAME_TO_BE_REPLACED
+spec:
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 3
+  schedule: "0 13 * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+          - name: REPO_NAME_TO_BE_REPLACED
+            image: IMAGE_TO_BE_REPLACED
+            args:
+            - /bin/sh
+            - -c
+            - gcloud auth activate-service-account --key-file=GCP_SERVICE_ACCOUNT_JSON;
+              gcloud container clusters get-credentials CLUSTER --zone ZONE --project PROJECT_ID;
+              python3 /app/run.py
+            resources:
+              requests:
+                cpu: 0.5m
+                memory: 500Mi
+          restartPolicy: Never
+          volumes:
+          - name: REPO_NAME_TO_BE_REPLACED-volume
+            configMap:
+              name: CONFIGMAP_TO_BE_REPLACED
