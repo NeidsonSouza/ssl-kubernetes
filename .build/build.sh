@@ -1,10 +1,12 @@
 #! /bin/sh
 
 SET_VARS(){
-    if [ $1 == "test"]; then
+    if [ "$DEPLOYMENT" = "test" ]; then
+        echo $DEPLOYMENT
         export GCLOUD_CLUSTER=$GCLOUD_CLUSTER_TEST
         export GCLOUD_ZONE=$GCLOUD_ZONE_TEST
-    elif [ $1 == "production" ]; then
+    elif [ "$DEPLOYMENT" = "production" ]; then
+        echo $DEPLOYMENT
         export GCLOUD_CLUSTER=$GCLOUD_CLUSTER_PROD
         export GCLOUD_ZONE=$GCLOUD_ZONE_PROD
     fi
@@ -69,7 +71,8 @@ SETUP_CRONJOB(){
 
 
 # Main code
-SET_VARS $1
+export DEPLOYMENT=$1
+SET_VARS
 SETUP_GCP
 CONFIG_CLOUDFLARE_AUTH_FILE
 CONFIG_AWS_AUTH_FILE
