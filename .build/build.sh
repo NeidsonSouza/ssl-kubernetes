@@ -38,8 +38,12 @@ CONFIG_AWS_AUTH_FILE(){
 }
 
 CONFIG_GCP_SERVICE_ACCOUNT_FILE(){
-    export GCP_SERVICE_ACCOUNT_JSON=letsencrypt/$BITBUCKET_REPO_SLUG-gcp-service-account.json
+    export GCP_SERVICE_ACCOUNT_JSON="letsencrypt/$BITBUCKET_REPO_SLUG-gcp-service-account.json"
+    echo --------------------------------------------------
+    echo $GCP_SERVICE_ACCOUNT_JSON
     echo "$SERVICE_ACCOUNT" > $GCP_SERVICE_ACCOUNT_JSON
+    echo --------------------------------------------------
+    cat $GCP_SERVICE_ACCOUNT_JSON
 }
 
 CONFIG_DOMAINS_CSV_CLUSTER_TST(){
@@ -61,7 +65,6 @@ CREATE_CONFIGMAP(){
 SETUP_CRONJOB(){
     export CRONJOB_YML=$(dirname $0)/ssl-certificates-cronjob.yml
     sed -i 's/REPO_NAME_TO_BE_REPLACED/'$BITBUCKET_REPO_SLUG'/g' $CRONJOB_YML
-    sed -i 's/IMAGE_TO_BE_REPLACED/'$IMAGE_NAME'/g' $CRONJOB_YML
     sed -i 's/GCP_SERVICE_ACCOUNT_JSON/'$GCP_SERVICE_ACCOUNT_JSON'/g' $CRONJOB_YML
     sed -i 's/CLUSTER/'$GCLOUD_CLUSTER'/g' $CRONJOB_YML
     sed -i 's/ZONE/'$GCLOUD_ZONE'/g' $CRONJOB_YML
