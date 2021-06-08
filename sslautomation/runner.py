@@ -1,30 +1,30 @@
+import json
 import os
 import sys
 from .AutomationListCerts import AutomationListCerts
 from .AutomationUpgradeCerts import AutomationUpgradeCerts
+from .AutomationUpgradeProxy import AutomationUpgradeProxy
 from .Domains import Domains
+from .Repository import Repository
 
 ROOT_DIR = os.getenv('ROOT_DIR')
 CSV_FILE = '{}/data/domains.csv'.format(ROOT_DIR)
-    
-def main(flag):
-    if len(flag) != 2:
-        raise_error()
-    elif flag[1] == '--list-certs':
-        AutomationListCerts(Domains(CSV_FILE)).list_certs()
-    elif flag[1] == '--upgrade-repository-certs':
-        AutomationUpgradeCerts(Domains(CSV_FILE)).upgrade_repository_certs()
-    else:
-        raise_error()
+domains = Domains(CSV_FILE)
+user = 'monitorssl'
+password = 'jYsEmt2S9ktyQehhShPz'
 
-
-def raise_error():
-    raise ValueError(
-        ""\
-        "Flags available:"\
-        ""\
-        "--list-certs: only list certs and their expiry dates"\
-        "--upgrade-repository-certs: upgrade certs only in repository (not in production)"\
-        "--upgrade-certs-prod: upgrade certs in production (BE CAREFULL !!!)"\
-        ""
-    )
+def main():
+    repo = Repository(user, password)
+    repo.clone()
+    repo.create_symlink()
+    AutomationUpgradeCerts(domains).upgrade_repository_certs()
+    repo.push()
+    replaced_certs = AutomationUpgradeProxy(domains).upgrade_proxy()
+    dates = AutomationListCerts(domains).list_certs()
+    join_dict = [
+        {**dic_date, **dic_secret}
+        for dic_date, dic_secret in zip(dates, replaced_certs)
+    ]
+    final_dict = {'array': join_dict}
+    json_payload = json.dumps(final_dict)
+    print(json_payload)

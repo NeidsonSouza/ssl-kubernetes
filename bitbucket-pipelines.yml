@@ -1,60 +1,26 @@
+options:
+  #max-time: 5 # minutes
+  docker: true
+
 pipelines:
   custom:
-    list-certs:
+    upgrade-proxy-to-test:
       - step:
-          image: python:3.7-slim
-          caches:
-            - pip
-          name: Main script
-          script:
-            # Installing dependencies
-            - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python run.py --list-certs
-
-    upgrade-repository-certs-to-test:
-      - step:
-          image: python:3.7-slim
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
+          name: Deploy to GCP
           deployment: test
           caches:
-            - pip
-          name: Main script
+            - docker
           script:
-            # Installing dependencies
-            - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python run.py --upgrade-repository-certs
+            - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
 
-    upgrade-repository-certs-to-production:
-      - step:
-          image: python:3.7-slim
-          deployment: production
-          caches:
-            - pip
-          name: Main script
-          script:
-            # Installing dependencies
-            - apt update
-            - apt install -y certbot=0.31.0-1+deb10u1 git
-            - pip install .
-            # Managing files
-            - rm -r /etc/letsencrypt/
-            - ln -s $(pwd)/letsencrypt/ /etc/
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            # Running main code
-            - export ROOT_DIR=$(pwd)
-            - python run.py --upgrade-repository-certs
+  # branches:
+  #   master:
+  #     - step:
+  #         image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
+  #         name: Deploy to GCP
+  #         deployment: production
+  #         caches:
+  #           - docker
+  #         script:
+  #           - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT

@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from .LocalCert import LocalCert
 from .WebCert import WebCert
 
@@ -8,22 +9,20 @@ class AutomationListCerts:
         
     def list_certs(self):
         if len(self.domains) > 0:
-            self.__print_certs()
-    
-    def __print_certs(self):
-        domain_and_date = self.__get_domain_and_date()
-        domain_and_date.sort(key=lambda x: x['expiry_date'])
-        self.__print(domain_and_date)
+            return self.__get_domain_and_dates()
             
-    def __get_domain_and_date(self):
-        return [{
-            'domain': domain['domain'],
-            'expiry_date': WebCert(domain['IP']).get_expiry_date() 
-        } for domain in self.domains]
-
-    def __print(self, domain_and_date):
-        for domain in domain_and_date:
-            print('{:20} -> Expiry date: {}'.format(
-                domain['domain'],
-                domain['expiry_date'].strftime("%B %d %Y - %H:%M:%S")
-            ))
+    def __get_domain_and_dates(self):
+        domain_list = []
+        for domain in self.domains:
+            web_cert = WebCert(domain['secret'])
+            domain_list.append(
+                {
+                    'domain': domain['domain'],
+                    'expiry_date': web_cert.get_expiry_date().isoformat(),
+                    '5_days_or_less_to_expiry': web_cert.is_close_to_expiring(
+                        limit_in_days=5
+                    ),
+                    'is_expired': web_cert.get_expiry_date() < datetime.now()
+                }
+            )
+        return domain_list

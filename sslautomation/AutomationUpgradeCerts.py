@@ -13,12 +13,12 @@ class AutomationUpgradeCerts:
             exit(0)
             
     def upgrade_repository_certs(self):
+        print('Checking if any certificate need to be created and commited...')
         expired_web_domains = self._get_domain_expired_in_web()
         certs_to_be_created = self._get_expiring_or_missing_certs(
             expired_web_domains
         )
         self._create_certs(certs_to_be_created)
-        self._git_add_commit_push()
         not_created_domains = self._get_not_created_domains(certs_to_be_created)
         if len(not_created_domains) != 0: self._raise_error(not_created_domains)
         
@@ -26,7 +26,7 @@ class AutomationUpgradeCerts:
         expired_web_certs = [
             domain
             for domain in self.domains
-            if WebCert(domain['IP']).is_close_to_expiring()            
+            if WebCert(domain['secret']).is_close_to_expiring()            
         ]
         return expired_web_certs
     
@@ -45,13 +45,6 @@ class AutomationUpgradeCerts:
         return [
             cert.domain for cert in certs_to_be_created if not cert.exists()
         ]
-    
-    def _git_add_commit_push(self):
-        os.system(
-            "git add *.pem && "\
-            "git commit -m'[skip ci] Certs added $(date)' && "\
-            "git push"
-        )
         
     def _raise_error(self, not_created_domains):
         raise FileNotFoundError("ERROR: certificates not created:\n{}".format(
