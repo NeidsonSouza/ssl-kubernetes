@@ -61,7 +61,17 @@ PUBLISH_IMAGE(){
 CREATE_CONFIGMAP(){
     export CONFIGMAP_NAME=$BITBUCKET_REPO_SLUG-configmap
     kubectl get configmap | grep "$CONFIGMAP_NAME" && kubectl delete configmap $CONFIGMAP_NAME
-    kubectl create configmap $CONFIGMAP_NAME --from-literal=SERVER=$SERVER --from-literal=AWS_CONFIG_FILE=$AWS_CONFIG_FILE
+    kubectl create configmap $CONFIGMAP_NAME \
+        --from-literal=SERVER=$SERVER \
+        --from-literal=AWS_CONFIG_FILE=$AWS_CONFIG_FILE
+}
+
+CREATE_SECRET(){
+    export SECRET_NAME=$BITBUCKET_REPO_SLUG-secret
+    kubectl get secret | grep "$SECRET_NAME" && kubectl delete secret $SECRET_NAME
+    kubectl create secret generic $SECRET_NAME \
+        --from-literal=BITBUCKET_USER=$BITBUCKET_USER \
+        --from-literal=BITBUCKET_PASSWORD=$BITBUCKET_PASSWORD
 }
 
 SETUP_CRONJOB(){
@@ -71,6 +81,7 @@ SETUP_CRONJOB(){
     sed -i 's/ZONE/'$GCLOUD_ZONE'/g' $CRONJOB_YML
     sed -i 's/PROJECT_ID/'$GCLOUD_PROJECT'/g' $CRONJOB_YML
     sed -i 's/CONFIGMAP_TO_BE_REPLACED/'$CONFIGMAP_NAME'/g' $CRONJOB_YML
+    sed -i 's/SECRET_TO_BE_REPLACED/'$SECRET_NAME'/g' $CRONJOB_YML
     sed -i 's/BITBUCKET_COMMIT/'$BITBUCKET_COMMIT'/g' $CRONJOB_YML
     cat $CRONJOB_YML
 }
@@ -85,5 +96,6 @@ CONFIG_AWS_AUTH_FILE
 CONFIG_GCP_SERVICE_ACCOUNT_FILE
 PUBLISH_IMAGE
 CREATE_CONFIGMAP
+CREATE_SECRET
 SETUP_CRONJOB
 kubectl apply -f $CRONJOB_YML
