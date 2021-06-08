@@ -12,47 +12,15 @@ pipelines:
           caches:
             - docker
           script:
-            # SETUP
-            - gcloud components install kubectl --quiet
-            - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
-            - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
-            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
-            - gcloud config set project $GCLOUD_PROJECT
-            - gcloud auth configure-docker --quiet
-            - gcloud container clusters get-credentials $GCLOUD_CLUSTER_TEST --zone=$GCLOUD_ZONE_TEST --project $GCLOUD_PROJECT
-            # BUILD IMAGE
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            - chmod 600 letsencrypt/cloudflare.ini
-            - cat tests/.domains.csv > data/domains.csv
-            - cat data/domains.csv
-            - docker build . -t $IMAGE_NAME
-            # PUBLISH IMAGE
-            - docker push $IMAGE_NAME
-            # DEPLOYMENT
-            - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
+            - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
 
-  branches:
-    master:
-      - step:
-          image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
-          name: Deploy to GCP
-          deployment: production
-          caches:
-            - docker
-          script:
-            # SETUP
-            - gcloud components install kubectl --quiet
-            - export IMAGE_NAME=us.gcr.io/$GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT
-            - echo $GCLOUD_API_KEYFILE | base64 -d > ~/.gcloud-api-key.json
-            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
-            - gcloud config set project $GCLOUD_PROJECT
-            - gcloud auth configure-docker --quiet
-            - gcloud container clusters get-credentials $GCLOUD_CLUSTER_PROD --zone=$GCLOUD_ZONE_PROD --project $GCLOUD_PROJECT
-            # BUILD IMAGE
-            - echo dns_cloudflare_api_token = $CLOUDFLARE_TOKEN > letsencrypt/cloudflare.ini
-            - chmod 600 letsencrypt/cloudflare.ini
-            - docker build . -t $IMAGE_NAME
-            # PUBLISH IMAGE
-            - docker push $IMAGE_NAME
-            # DEPLOYMENT
-            - kubectl set image cronjob $BITBUCKET_REPO_SLUG $BITBUCKET_REPO_SLUG=$IMAGE_NAME --record
+  # branches:
+  #   master:
+  #     - step:
+  #         image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
+  #         name: Deploy to GCP
+  #         deployment: production
+  #         caches:
+  #           - docker
+  #         script:
+  #           - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
