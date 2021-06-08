@@ -1,9 +1,2 @@
 secret,domain,domain_manager
-xxx-meusucesso.com,meusucesso.com,cloudflare
-xxx-wiseup.com,wiseup.com,cloudflare
-xxx-powerhouse.pro,powerhouse.pro,cloudflare
-xxx-wiseupcorp.com,wiseupcorp.com,cloudflare
-xxx-buzzclub.com.br,buzzclub.com.br,cloudflare
-xxx-wiseuplive.com.br,wiseuplive.com.br,cloudflare
-xxx-numberone.com.br,numberone.com.br,cloudflare
-xxx-wup.onl,wup.onl,aws
+buzzclub-certificate,buzzclub.com.br,cloudflare

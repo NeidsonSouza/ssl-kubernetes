@@ -14,13 +14,13 @@ pipelines:
           script:
             - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
 
-  # branches:
-  #   master:
-  #     - step:
-  #         image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
-  #         name: Deploy to GCP
-  #         deployment: production
-  #         caches:
-  #           - docker
-  #         script:
-  #           - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
+  branches:
+    master:
+      - step:
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
+          name: Deploy to GCP
+          deployment: production
+          caches:
+            - docker
+          script:
+            - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
