@@ -37,6 +37,7 @@ O jsonPaylod apresentado no final do log de cada job é uma das informações ma
 ]
 ```
 Neste log podemos ver os dados referente a um certificado:
+
 * ```domain```: se refere ao domínio ao qual o certificado está atrelado.
 * ```expiry_date```: data de expiração do certificado.
 * ```is_expired```: informa se o certificado está expirado ou não.
