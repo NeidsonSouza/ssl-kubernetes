@@ -84,10 +84,19 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 
 ## Getting Started
 
-### Dependencies
+### Dependências
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+* Linux
+* Python 3.6+
+* Módulos Python:
+    - pyOpenSSL:20.0.1
+    - certbot-dns-cloudflare:1.13.0
+* Docker
+* Cluster Kubernetes
+* Conta Letsencrypt
+* Conta Cloudflare e/ou AWS
+* Conta GCP
+
 
 ### Installing
 
