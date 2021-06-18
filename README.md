@@ -23,7 +23,7 @@ Cada certificado gerado é comitado neste repositório e substituído, nos clust
 * Nome do CronJob no cluster-tst: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1-a/cluster-tst/default/ssl-certificates/)
 ### Logs
 
-Os logs referentes a cada job (POD) rodado diariamente podem ser vistos ao acessar o CronJob ```ssl-certificates``` de cada cluster.
+Os logs referentes à cada job (POD) rodado diariamente podem ser vistos ao acessar o CronJob ```ssl-certificates``` de cada cluster.
 
 O jsonPaylod apresentado no final do log, traz informações mais detalhadas de cada certificado e possui o seguinte formato:
 
@@ -38,7 +38,7 @@ O jsonPaylod apresentado no final do log, traz informações mais detalhadas de 
   }
 ]
 ```
-Neste log podemos ver os dados referente a um certificado:
+Neste log podemos ver os dados referente à um certificado:
 
 * ```domain```: se refere ao domínio ao qual o certificado está atrelado.
 * ```expiry_date```: data de expiração do certificado.
@@ -50,9 +50,9 @@ Neste log podemos ver os dados referente a um certificado:
 
 Métricas configuradas no GCP:
 
-* [was-cert-replaced-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes a atualização de certificado. Essa métrica está vinculada ao alerta [SSL - Atualizado](https://console.cloud.google.com/monitoring/alerting/policies/3457280891500976040?project=wiseup-102030).
-* [is-there-expired-ssl-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referente a certificados expirados (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Expirado](https://console.cloud.google.com/monitoring/alerting/policies/12911683693827560920?project=wiseup-102030).
-* [ssl-replaced-failed](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes a certificados que faltam 5 dias ou menos para expirar. Isso significa que houve falha ao tentar atualizar o certificado, visto que cada certificado deve ser atualizado quando faltar 7 dias para expiração (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Falha na atualização](https://console.cloud.google.com/monitoring/alerting/policies/1567324046487602294?project=wiseup-102030).
+* [was-cert-replaced-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes à atualização de certificado. Essa métrica está vinculada ao alerta [SSL - Atualizado](https://console.cloud.google.com/monitoring/alerting/policies/3457280891500976040?project=wiseup-102030).
+* [is-there-expired-ssl-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referente à certificados expirados (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Expirado](https://console.cloud.google.com/monitoring/alerting/policies/12911683693827560920?project=wiseup-102030).
+* [ssl-replaced-failed](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes à certificados que faltam 5 dias ou menos para expirar. Isso significa que houve falha ao tentar atualizar o certificado, visto que cada certificado deve ser atualizado quando faltar 7 dias para expiração (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Falha na atualização](https://console.cloud.google.com/monitoring/alerting/policies/1567324046487602294?project=wiseup-102030).
 ### Notificações
 
 A lista de emails que recebem os alertas é definida no ambiente de configuração dos mesmos.
@@ -63,6 +63,24 @@ O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele j
 O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
 
 ## Variáveis de Ambiente
+
+* ```SERVER```: Recebe a URL utilizada para acessar os servidores da [Let's Encrypt](https://letsencrypt.org/). Possíveis valores:
+
+  - https://acme-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados válidos para serem usados em produção.
+
+  - https://acme-staging-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados de teste. Útil para ser usando durante o desenvolvimento de apps.
+
+* ```CLOUDFLARE_TOKEN```: Token de acesso a Cloudflare. Utilizado para  validar permissão para gerar certificados referentes à domínios hospedados na Cloudflare.
+
+* ```AWS_ACCESS_KEY_ID```: ID de acesso a AWS. Utilizado juntamente com a senha (```AWS_SECRET_ACCESS_KEY```), a fim de validar permissão para gerar certificados referentes à domínios hospedados na AWS.
+
+* ```AWS_SECRET_ACCESS_KEY```: Senha de acesso a AWS. Utilizado juntamente com o ID (```AWS_ACCESS_KEY_ID```), a fim de validar permissão para gerar certificados referentes à domínios hospedados na AWS.
+
+* ```SERVICE_ACCOUNT```: Conteúdo do arquivo json referente à account service que autoriza a automação a executar comandos no cluster-tst e cluster-prd no GCP.
+
+* ```BITBUCKET_USER```: Usuário de acesso a este repositório. Utilizado juntamente com a senha (```BITBUCKET_PASSWORD```) para realizar commit dos certificados gerados.
+
+* ```BITBUCKET_PASSWORD```: Senha de acesso a este repositório. Utilizado juntamente com o usuário (```BITBUCKET_USER```) para realizar commit dos certificados gerados.
 
 ## Getting Started
 
