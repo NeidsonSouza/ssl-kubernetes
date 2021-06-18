@@ -25,7 +25,7 @@ Cada certificado gerado é comitado neste repositório e substituído, nos clust
 
 Os logs referentes a cada job (POD) rodado diariamente podem ser vistos ao acessar o CronJob ```ssl-certificates``` de cada cluster.
 
-O jsonPaylod apresentado no final do log de cada job traz informações mais detalhadas de cada certificado e possui o seguinte formato:
+O jsonPaylod apresentado no final do log, traz informações mais detalhadas de cada certificado e possui o seguinte formato:
 
 ```
 [
