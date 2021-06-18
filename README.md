@@ -66,9 +66,9 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 
 * ```SERVER```: Recebe a URL utilizada para acessar os servidores da [Let's Encrypt](https://letsencrypt.org/). Possíveis valores:
 
-  - https://acme-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados válidos para serem usados em produção.
+    * https://acme-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados válidos para serem usados em produção.
 
-  - https://acme-staging-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados de teste. Útil para ser usando durante o desenvolvimento de apps.
+    * https://acme-staging-v02.api.letsencrypt.org/directory: Utilizado para gerar certificados de teste. Útil para ser usando durante o desenvolvimento de apps.
 
 * ```CLOUDFLARE_TOKEN```: Token de acesso a Cloudflare. Utilizado para  validar permissão para gerar certificados referentes à domínios hospedados na Cloudflare.
 
