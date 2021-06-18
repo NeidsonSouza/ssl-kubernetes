@@ -13,8 +13,8 @@ Cada certificado gerado é comitado neste repositório e substituído, nos clust
 ## Features
 
 * Verificação das datas de expiração.
-* Criação de novos certificados obtidos pela unidade certificadora [Let's Encrypt](https://letsencrypt.org/).
-* Substituição da ```secret``` utilizada por cada aplicação do cluster Kubernetes, que possui 7 ou menos dias restante para expirar ou que já esteja expirado.
+* Criação de novos certificados obtidos por meio da unidade certificadora [Let's Encrypt](https://letsencrypt.org/).
+* Substituição das ```secrets```, contidas no namespace ```proxy```, utilizadas por cada aplicação dos clusters, caso este armazene certificado com data de expiração que esteja dentro dos próximos 7 dias ou que já esteja expirado.
 * Os novos certificados gerados são adicionados automaticamente a este repositório e estão localizados no diretório [```./letsencrypt```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/letsencrypt/).
 
 ## Informações GCP
