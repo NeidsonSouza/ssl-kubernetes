@@ -19,13 +19,13 @@ Cada certificado gerado é comitado neste repositório e substituído, nos clust
 
 ## Informações GCP
 
-* Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D)))
-* Nome do CronJob no cluster-tst: [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1-a/cluster-tst/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1-a%2Fcluster-tst%22%5D,%22n%22:%5B%5D)))
+* Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/)
+* Nome do CronJob no cluster-tst: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1-a/cluster-tst/default/ssl-certificates/)
 ### Logs
 
-Os logs referentes a cada job (POD) rodando diariamente podem ser vistos ao acessar o devido cluster Kubernetes no GCP consultando o workload [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D))).
-Os logs apresentam cada passo trilhado pelo app de automação.
-O jsonPaylod apresentado no final do log de cada job é uma das informações mais importantes visto que traz informações mais detalhadas de cada certificado. O jsonPayload apresenta o seguinte formato:
+Os logs referentes a cada job (POD) rodado diariamente podem ser vistos ao acessar o CronJob ```ssl-certificates``` de cada cluster.
+
+O jsonPaylod apresentado no final do log de cada job traz informações mais detalhadas de cada certificado e possui o seguinte formato:
 
 ```
 [
