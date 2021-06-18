@@ -6,7 +6,7 @@ Este projeto tem como objetivo automatizar a renovação de certificados SSL uti
 
 Este projeto foi desenvolvido com o intuito de evitar downtime dos produtos da Wiser Educação por problemas de expiração de certificados SSL.
 
-A automação é responsável por verificar todos os dias, por meio de cronjob Kubernetes, se algum dos dominios contidos em [```./data/domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/data/domains.csv) (cluster-prd) e em [```./tests/.domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/tests/.domains.csv) (cluster-tst) estão próximos da data de expiração ou se já estão expirados, e em seguida adquirir novos certificados para cada um deles acessando os servidores do [Let's Encrypt](https://letsencrypt.org/). Cada certificado gerado é comitado neste repositório e substituído, nos clusters citados, de maneira automática.
+A automação é responsável por verificar todos os dias, por meio de CronJob Kubernetes, se algum dos dominios contidos em [```./data/domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/data/domains.csv) (cluster-prd) e em [```./tests/.domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/tests/.domains.csv) (cluster-tst) estão próximos da data de expiração ou se já estão expirados, e em seguida adquirir novos certificados para cada um deles acessando os servidores do [Let's Encrypt](https://letsencrypt.org/). Cada certificado gerado é comitado neste repositório e substituído, nos clusters citados, de maneira automática.
 
 ## Features
 
@@ -17,11 +17,11 @@ A automação é responsável por verificar todos os dias, por meio de cronjob K
 
 ## Informações GCP
 
-* Nome do cronjob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D)))
-* Nome do cronjob no cluster-tst: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1-a/cluster-tst/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1-a%2Fcluster-tst%22%5D,%22n%22:%5B%5D)))
+* Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D)))
+* Nome do CronJob no cluster-tst: [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1-a/cluster-tst/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1-a%2Fcluster-tst%22%5D,%22n%22:%5B%5D)))
 ### Logs
 
-Os logs referentes a cada job (POD) rodando diariamente podem ser vistos ao acessar o devido cluster Kubernetes no GCP consultando o workload [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D))).
+Os logs referentes a cada job (POD) rodando diariamente podem ser vistos ao acessar o devido cluster Kubernetes no GCP consultando o workload [ssl-certificates](https://console.cloud.google.com/kubernetes/CronJob/us-central1/cluster-prd/default/ssl-certificates/details?project=wiseup-102030&pageState=(%22savedViews%22:(%22i%22:%221b8adbfc7809424d9c067661a01816bf%22,%22c%22:%5B%22gke%2Fus-central1%2Fcluster-prd%22%5D,%22n%22:%5B%5D))).
 Os logs apresentam cada passo trilhado pelo app de automação.
 O jsonPaylod apresentado no final do log de cada job é uma das informações mais importantes visto que traz informações mais detalhadas de cada certificado. O jsonPayload apresenta o seguinte formato:
 
@@ -56,7 +56,9 @@ Métricas configuradas no GCP:
 A lista de emails que recebem os alertas é definida no ambiente de configuração dos mesmos.
 ## Pipelines
 
-*
+O [```bitbucket-pipelines.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/bitbucket-pipelines.yml) roda o script [```./.build/build.sh```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/build.sh/) passando o nome da deployment como argumento de entrada.
+O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
+O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
 
 ## Variáveis de Ambiente
 
