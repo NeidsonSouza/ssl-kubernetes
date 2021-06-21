@@ -10,7 +10,7 @@ class Certificate:
         expiry_date = datetime.strptime(cert_string_time, "%Y%m%d%H%M%SZ")
         return expiry_date
     
-    def is_close_to_expiring(self, cert, limit_in_days=7):
+    def is_close_to_expiring(self, cert, limit_in_days=20):
         expiry_date = self.get_expiry_date()
         time_left = expiry_date - datetime.now()
         return time_left.days < limit_in_days
