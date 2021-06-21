@@ -63,7 +63,7 @@ class LocalCert(Certificate):
         return open(self.cert_pem_dir, 'r').read()
     
     
-    def is_close_to_expiring(self, limit_in_days=89):
+    def is_close_to_expiring(self, limit_in_days=20):
         return super().is_close_to_expiring(
             self.__get_cert(), limit_in_days=limit_in_days
         )
