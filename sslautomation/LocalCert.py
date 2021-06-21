@@ -72,5 +72,5 @@ class LocalCert(Certificate):
     def rm_dirs(self):
         print('rm_dir local cert')
         archive_dir = '{}/letsencrypt/archive/{}'.format(self.ROOT_DIR, self.domain)
-        if os.isdir(archive_dir): shutil.rmtree(archive_dir)
-        if os.isdir(self.dir): shutil.rmtree(self.dir)
+        if os.path.isdir(archive_dir): shutil.rmtree(archive_dir)
+        if os.path.isdir(self.dir): shutil.rmtree(self.dir)
