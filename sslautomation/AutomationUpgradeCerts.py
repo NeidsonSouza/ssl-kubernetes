@@ -39,7 +39,9 @@ class AutomationUpgradeCerts:
         return certs_to_be_created
         
     def _create_certs(self, certs_to_be_created):
-        for cert in certs_to_be_created: cert.create()
+        for cert in certs_to_be_created:
+            cert.rm_dirs()
+            cert.create()
     
     def _get_not_created_domains(self, certs_to_be_created):
         return [
