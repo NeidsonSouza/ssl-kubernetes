@@ -98,13 +98,15 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 * Conta GCP
 
 
-### Installing
+### Installing Locally
 
+* preencher a lista de doiminios e secrets (CSV)
 * How/where to download your program
 * Any modifications needed to be made to files/folders
 
 ### Executing program
 
+* gcp e local
 * How to run the program
 * Step-by-step bullets
 ```
