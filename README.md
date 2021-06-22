@@ -14,7 +14,7 @@ Cada certificado gerado é comitado neste repositório e substituído, nos clust
 
 * Verificação das datas de expiração.
 * Criação de novos certificados obtidos por meio da unidade certificadora [Let's Encrypt](https://letsencrypt.org/).
-* Substituição das ```secrets```, contidas no namespace ```proxy```, utilizadas por cada aplicação dos clusters, caso este armazene certificado com data de expiração que esteja dentro dos próximos 7 dias ou que já esteja expirado.
+* Substituição das ```secrets```, contidas no namespace ```proxy```, utilizadas por cada aplicação dos clusters, caso este armazene certificado com data de expiração que esteja dentro dos próximos 20 dias ou que já esteja expirado.
 * Os novos certificados gerados são adicionados automaticamente a este repositório e estão localizados no diretório [```./letsencrypt```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/letsencrypt/).
 
 ## Informações GCP
@@ -43,7 +43,7 @@ Neste log podemos ver os dados referente à um certificado:
 * ```domain```: se refere ao domínio ao qual o certificado está atrelado.
 * ```expiry_date```: data de expiração do certificado.
 * ```is_expired```: informa se o certificado está expirado ou não.
-* ```5_days_or_less_to_expiry```: Informa se o certificado está para expirar dentro de 5 dias ou menos. Quando o valor é ```true``` isso significa que houve falha na atualização, visto que a automação foi construída para atualizar os certificados faltando 7 dias para a data de expiração. Este dado é usado para enviar alerta de falha na atualização. Falaremos adiante sobre configuração de notificações.
+* ```5_days_or_less_to_expiry```: Informa se o certificado está para expirar dentro de 5 dias ou menos. Quando o valor é ```true``` isso significa que houve falha na atualização, visto que a automação foi construída para atualizar os certificados faltando 20 dias para a data de expiração. Este dado é usado para enviar alerta de falha na atualização. Falaremos adiante sobre configuração de notificações.
 * ```was_cert_replaced```: informa se o certificado foi atualizado naquele job em específico.
 
 ### Métricas
@@ -52,7 +52,7 @@ Métricas configuradas no GCP:
 
 * [was-cert-replaced-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes à atualização de certificado. Essa métrica está vinculada ao alerta [SSL - Atualizado](https://console.cloud.google.com/monitoring/alerting/policies/3457280891500976040?project=wiseup-102030).
 * [is-there-expired-ssl-metric](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referente à certificados expirados (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Expirado](https://console.cloud.google.com/monitoring/alerting/policies/12911683693827560920?project=wiseup-102030).
-* [ssl-replaced-failed](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes à certificados que faltam 5 dias ou menos para expirar. Isso significa que houve falha ao tentar atualizar o certificado, visto que cada certificado deve ser atualizado quando faltar 7 dias para expiração (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Falha na atualização](https://console.cloud.google.com/monitoring/alerting/policies/1567324046487602294?project=wiseup-102030).
+* [ssl-replaced-failed](https://console.cloud.google.com/logs/metrics?project=wiseup-102030): coleta dados referentes à certificados que faltam 5 dias ou menos para expirar. Isso significa que houve falha ao tentar atualizar o certificado, visto que cada certificado deve ser atualizado quando faltar 20 dias para expiração (em teoria esta métrica deve apresentar sempre o valor 0). Essa métrica está vinculada ao alerta [SSL - Falha na atualização](https://console.cloud.google.com/monitoring/alerting/policies/1567324046487602294?project=wiseup-102030).
 ### Notificações
 
 A lista de emails que recebem os alertas é definida no ambiente de configuração dos mesmos.
