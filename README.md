@@ -27,10 +27,10 @@ Os logs referentes à cada job (POD) rodado diariamente podem ser vistos ao aces
 
 O jsonPaylod apresentado no final do log, traz informações mais detalhadas de cada certificado e possui o seguinte formato:
 
-```
+```json
 [
   {
-    "domain": "buzzclub.com.br"
+    "domain": "buzzclub.com.br",
     "expiry_date": "2021-09-06T15:44:36",
     "is_expired": false,
     "5_days_or_less_to_expiry": false,
