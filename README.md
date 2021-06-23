@@ -68,6 +68,14 @@ script:
 O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
 O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
 
+O pipeline ```upgrade-proxy-to-test``` do tipo custom faz o deploy para o cluster-tst usando o arquivo CSV ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
+
+```bash
+cat tests/.domains.csv > data/domains.csv
+```
+
+O pipeline da branch ```master``` realiza o deploy para o cluster-prd e utiliza o arquivo original ```data/domains.csv```, não fazendo nenhuma alteração no mesmo.
+
 ## Variáveis de Ambiente
 
 * ```SERVER```: Recebe a URL utilizada para acessar os servidores da [Let's Encrypt](https://letsencrypt.org/). Possíveis valores:
@@ -103,52 +111,7 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 * Conta Cloudflare e/ou AWS
 * Conta GCP
 
+## Autor
 
-### Installing Locally
-
-* preencher a lista de doiminios e secrets (CSV)
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* gcp e local
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
+Nome: Neidson Souza
+Email: neidson.ds.souza@gmail.com
