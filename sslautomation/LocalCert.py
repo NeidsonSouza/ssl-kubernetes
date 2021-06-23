@@ -1,4 +1,5 @@
 import os
+import shutil
 from .Certificate import Certificate
 
 
@@ -63,7 +64,13 @@ class LocalCert(Certificate):
         return open(self.cert_pem_dir, 'r').read()
     
     
-    def is_close_to_expiring(self, limit_in_days=7):
+    def is_close_to_expiring(self, limit_in_days=20):
         return super().is_close_to_expiring(
             self.__get_cert(), limit_in_days=limit_in_days
         )
+        
+    def rm_dirs(self):
+        print('rm_dir local cert')
+        archive_dir = '{}/letsencrypt/archive/{}'.format(self.ROOT_DIR, self.domain)
+        if os.path.isdir(archive_dir): shutil.rmtree(archive_dir)
+        if os.path.isdir(self.dir): shutil.rmtree(self.dir)
