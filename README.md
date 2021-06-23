@@ -10,6 +10,8 @@ A automação é responsável por verificar todos os dias, por meio de um CronJo
 
 Cada certificado gerado é comitado neste repositório e substituído, nos clusters citados, de maneira automática.
 
+O novo certificado configurado no cluster só será válido após a atualização do Ingress. Esta automação não faz atualização do Ingress, deixando isso por conta do agendamento nativo de atualização do mesmo tanto no cluster-tst quanto no cluster-prd.
+
 ## Features
 
 * Verificação das datas de expiração.
@@ -46,6 +48,14 @@ Neste log podemos ver os dados referente à um certificado:
 * ```5_days_or_less_to_expiry```: Informa se o certificado está para expirar dentro de 5 dias ou menos. Quando o valor é ```true``` isso significa que houve falha na atualização, visto que a automação foi construída para atualizar os certificados faltando 20 dias para a data de expiração. Este dado é usado para enviar alerta de falha na atualização. Falaremos adiante sobre configuração de notificações.
 * ```was_cert_replaced```: informa se o certificado foi atualizado naquele job em específico.
 
+Um segundo ponto importante do log no GCP é a visualização de quais certificados serão atualizados, conforme mostrado no bloco de código abaixo:
+
+```bash
+Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certificate', 'powerhouse.pro-certificate', 'wiser.cloud-certificate', 'wiseuplive.com.br-certificate']
+```
+
+Podemos ver no log acima quais secrets serão atualizadas por estar prestes a alcançar a data de expiração (faltando 20 dias ou menos).
+
 ### Métricas
 
 Métricas configuradas no GCP:
@@ -68,13 +78,13 @@ script:
 O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
 O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
 
-O pipeline ```upgrade-proxy-to-test```, do tipo custom, faz o deploy para o cluster-tst usando o arquivo CSV ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
+O pipeline ```upgrade-proxy-to-test```, do tipo custom, faz o deploy para o cluster-tst usando o arquivo ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
 
 ```bash
 cat tests/.domains.csv > data/domains.csv
 ```
 
-O pipeline da branch ```master``` realiza o deploy para o cluster-prd e utiliza o arquivo original ```data/domains.csv```, não fazendo nenhuma alteração no mesmo.
+O pipeline da branch ```master``` realiza o deploy para o cluster-prd e utiliza o arquivo original ```data/domains.csv``` como base de dados, não fazendo nenhuma alteração no mesmo.
 
 ## Variáveis de Ambiente
 
@@ -95,10 +105,7 @@ O pipeline da branch ```master``` realiza o deploy para o cluster-prd e utiliza 
 * ```BITBUCKET_USER```: Usuário de acesso a este repositório. Utilizado juntamente com a senha (```BITBUCKET_PASSWORD```) para realizar commit dos certificados gerados.
 
 * ```BITBUCKET_PASSWORD```: Senha de acesso a este repositório. Utilizado juntamente com o usuário (```BITBUCKET_USER```) para realizar commit dos certificados gerados.
-
-## Getting Started
-
-### Dependências
+## Dependências
 
 * Linux
 * Python 3.6+
