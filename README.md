@@ -61,8 +61,10 @@ A lista de emails que recebem os alertas é definida no ambiente de configuraç�
 O [```bitbucket-pipelines.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/bitbucket-pipelines.yml) roda o script [```./.build/build.sh```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/build.sh/) passando o nome da deployment como argumento de entrada.
 
 ```
+
 script:
   - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
+
 ```
 
 O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
