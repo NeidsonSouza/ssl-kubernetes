@@ -68,7 +68,7 @@ script:
 O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
 O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
 
-O pipeline ```upgrade-proxy-to-test``` do tipo custom faz o deploy para o cluster-tst usando o arquivo CSV ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
+O pipeline ```upgrade-proxy-to-test```, do tipo custom, faz o deploy para o cluster-tst usando o arquivo CSV ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
 
 ```bash
 cat tests/.domains.csv > data/domains.csv
