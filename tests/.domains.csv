@@ -1,4 +1,16 @@
 secret,domain,domain_manager
+wisereducacao.com-certificate,wisereducacao.com,aws
+buzzclub.com.br-certificate,buzzclub.com.br,cloudflare
+buzzeditora.com.br-certificate,buzzeditora.com.br,cloudflare
 meusucesso.com-certificate,meusucesso.com,cloudflare
-wiseup.com-certificate,wiseup.com,cloudflare
+numberone.com.br-certificate,numberone.com.br,cloudflare
 powerhouse.pro-certificate,powerhouse.pro,cloudflare
+wiser.cloud-certificate,wiser.cloud,cloudflare
+wisersp.com-certificate,wisersp.com,cloudflare
+wiseup.com-certificate,wiseup.com,cloudflare
+wiseupcorp.com-certificate,wiseupcorp.com,cloudflare
+wiseuplive.com.br-certificate,wiseuplive.com.br,cloudflare
+wup.onl-certificate,wup.onl,aws
+youmove.com.br-certificate,youmove.com.br,aws
+youmoveonline.com.br-certificate,youmoveonline.com.br,aws
+wisertp.com-certificate,wisertp.com,cloudflare
