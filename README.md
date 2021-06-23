@@ -10,6 +10,8 @@ A automação é responsável por verificar todos os dias, por meio de um CronJo
 
 Cada certificado gerado é comitado neste repositório e substituído, nos clusters citados, de maneira automática.
 
+O novo certificado configurado no cluster só será válido após a atualização do Ingress. Esta automação não faz atualização do Ingress, deixando isso por conta do agendamento nativo de atualização do mesmo tanto no cluster-tst quanto no cluster-prd.
+
 ## Features
 
 * Verificação das datas de expiração.
@@ -27,10 +29,10 @@ Os logs referentes à cada job (POD) rodado diariamente podem ser vistos ao aces
 
 O jsonPaylod apresentado no final do log, traz informações mais detalhadas de cada certificado e possui o seguinte formato:
 
-```
+```json
 [
   {
-    "domain": "buzzclub.com.br"
+    "domain": "buzzclub.com.br",
     "expiry_date": "2021-09-06T15:44:36",
     "is_expired": false,
     "5_days_or_less_to_expiry": false,
@@ -46,6 +48,14 @@ Neste log podemos ver os dados referente à um certificado:
 * ```5_days_or_less_to_expiry```: Informa se o certificado está para expirar dentro de 5 dias ou menos. Quando o valor é ```true``` isso significa que houve falha na atualização, visto que a automação foi construída para atualizar os certificados faltando 20 dias para a data de expiração. Este dado é usado para enviar alerta de falha na atualização. Falaremos adiante sobre configuração de notificações.
 * ```was_cert_replaced```: informa se o certificado foi atualizado naquele job em específico.
 
+Um segundo ponto importante do log no GCP é a visualização de quais certificados serão atualizados, conforme mostrado no bloco de código abaixo:
+
+```bash
+Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certificate', 'powerhouse.pro-certificate', 'wiser.cloud-certificate', 'wiseuplive.com.br-certificate']
+```
+
+Podemos ver no log acima quais secrets serão atualizadas por estar prestes a alcançar a data de expiração (faltando 20 dias ou menos).
+
 ### Métricas
 
 Métricas configuradas no GCP:
@@ -59,8 +69,22 @@ A lista de emails que recebem os alertas é definida no ambiente de configuraç�
 ## Pipelines
 
 O [```bitbucket-pipelines.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/bitbucket-pipelines.yml) roda o script [```./.build/build.sh```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/build.sh/) passando o nome da deployment como argumento de entrada.
+
+```yaml
+script:
+  - ./.build/build.sh $BITBUCKET_DEPLOYMENT_ENVIRONMENT
+```
+
 O pipeline faz o papel de criar o CronJob caso ele ainda não exista, e se ele já existir é feito apenas o upgrade do mesmo.
 O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/.build/ssl-certificates-cronjob.yml), que é um template yaml do tipo CronJob para ser utilizado pelo Kubernetes.
+
+O pipeline ```upgrade-proxy-to-test```, do tipo custom, faz o deploy para o cluster-tst usando o arquivo ```./tests/.domains.csv``` como base de dados conforme pode ser visto nesse bloco de código do arquivo ```./.build/build.sh```:
+
+```bash
+cat tests/.domains.csv > data/domains.csv
+```
+
+O pipeline da branch ```master``` realiza o deploy para o cluster-prd e utiliza o arquivo original ```data/domains.csv``` como base de dados, não fazendo nenhuma alteração no mesmo.
 
 ## Variáveis de Ambiente
 
@@ -81,10 +105,7 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 * ```BITBUCKET_USER```: Usuário de acesso a este repositório. Utilizado juntamente com a senha (```BITBUCKET_PASSWORD```) para realizar commit dos certificados gerados.
 
 * ```BITBUCKET_PASSWORD```: Senha de acesso a este repositório. Utilizado juntamente com o usuário (```BITBUCKET_USER```) para realizar commit dos certificados gerados.
-
-## Getting Started
-
-### Dependências
+## Dependências
 
 * Linux
 * Python 3.6+
@@ -97,52 +118,7 @@ O processo de build utiliza o arquivo [```./.build/ssl-certificates-cronjob.yml`
 * Conta Cloudflare e/ou AWS
 * Conta GCP
 
+## Autor
 
-### Installing Locally
-
-* preencher a lista de doiminios e secrets (CSV)
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* gcp e local
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
+Nome: Neidson Souza
+Email: neidson.ds.souza@gmail.com
