@@ -19,6 +19,13 @@ O novo certificado configurado no cluster só será válido após a atualizaçã
 * Substituição das ```secrets```, contidas no namespace ```proxy```, utilizadas por cada aplicação dos clusters, caso este armazene certificado com data de expiração que esteja dentro dos próximos 20 dias ou que já esteja expirado.
 * Os novos certificados gerados são adicionados automaticamente a este repositório e estão localizados no diretório [```./letsencrypt```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/letsencrypt/).
 
+## Base de dados
+
+A automação utiliza dois arquivos CSV como base de dados:
+
+* [```./data/domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/data/domains.csv)
+* [```./tests/.domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/tests/.domains.csv)
+
 ## Informações GCP
 
 * Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/)
