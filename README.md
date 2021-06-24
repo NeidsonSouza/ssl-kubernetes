@@ -43,13 +43,13 @@ A primeira linha se refere ao cabeçalho:
 
 Na segunda linha temos como exemplo os dados do domínio ```buzzclub.com.br``` configurado no cluster-prd e esses dados estão diretamente ligados com a ordem referenciada no cabeçalho. Ou seja:
 
-* ```buzzclub-certificate```: secrets
+* ```buzzclub-certificate```: secret
 * ```buzzclub.com.br```: domain
 * ```cloudflare```: domain_manager
 
 A mesma lógica se aplica a terceira linha do código acima:
 
-* ```wup.onl-certificate```: secrets
+* ```wup.onl-certificate```: secret
 * ```wup.onl```: domain
 * ```aws```: domain_manager
 
