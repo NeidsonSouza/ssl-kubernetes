@@ -19,6 +19,45 @@ O novo certificado configurado no cluster só será válido após a atualizaçã
 * Substituição das ```secrets```, contidas no namespace ```proxy```, utilizadas por cada aplicação dos clusters, caso este armazene certificado com data de expiração que esteja dentro dos próximos 20 dias ou que já esteja expirado.
 * Os novos certificados gerados são adicionados automaticamente a este repositório e estão localizados no diretório [```./letsencrypt```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/letsencrypt/).
 
+## Base de dados
+
+A automação utiliza dois arquivos CSV como base de dados:
+
+* [```./data/domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/data/domains.csv) (clsuter-prd)
+* [```./tests/.domains.csv```](https://bitbucket.org/wisereducacao/ssl-certificates/src/master/tests/.domains.csv) (cluster-tst)
+
+No bloco de código abaixo podemos ver o tipo de conteúdo contido nesses dois arquivos:
+
+```csv
+secret,domain,domain_manager
+buzzclub-certificate,buzzclub.com.br,cloudflare
+wup.onl-certificate,wup.onl,aws
+```
+A primeira linha se refere ao cabeçalho:
+
+* secret: se refere ao nome da secret configurada no namespace proxy do cluster kubernetes.
+
+* domain: se refere ao domínio que está relacionado com a respectiva secret.
+
+* domain_manager: se refere ao serviço responsável por gerenciar o domínio (cloudfare ou aws são os únicos valores reconhecidos).
+
+Na segunda linha temos como exemplo os dados do domínio ```buzzclub.com.br``` configurado no cluster-prd e esses dados estão diretamente ligados com a ordem referenciada no cabeçalho. Ou seja:
+
+* ```buzzclub-certificate```: secrets
+* ```buzzclub.com.br```: domain
+* ```cloudflare```: domain_manager
+
+A mesma lógica se aplica a terceira linha do código acima:
+
+* ```wup.onl-certificate```: secrets
+* ```wup.onl```: domain
+* ```aws```: domain_manager
+
+OBS: É importante deixar claro que, na maioria das vezes, o nome das secrets no cluster-prd possuem padrões diferentes das secrets no cluster-tst mesmo quando se referem ao mesmo domínio e utilizam o mesmo certificado. Ex.:
+
+* ```buzzclub-certificate```: cluster-prd
+* ```buzzclub.com.br-certificate```: cluster-tst
+
 ## Informações GCP
 
 * Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/)
