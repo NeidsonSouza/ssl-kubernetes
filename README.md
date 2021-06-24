@@ -58,7 +58,6 @@ OBS: É importante deixar claro que, na maioria das vezes, o nome das secrets no
 * ```buzzclub-certificate```: cluster-prd
 * ```buzzclub.com.br-certificate```: cluster-tst
 
-
 ## Informações GCP
 
 * Nome do CronJob no cluster-prd: [ssl-certificates](https://console.cloud.google.com/kubernetes/cronjob/us-central1/cluster-prd/default/ssl-certificates/)
