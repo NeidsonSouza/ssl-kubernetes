@@ -95,6 +95,41 @@ Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certifi
 
 Podemos ver no log acima quais secrets serão atualizadas por estar prestes a alcançar a data de expiração (faltando 20 dias ou menos).
 
+### Troubleshooting
+
+Vamos olhar para pelo menos dois tipos de erros que podem acontecer:
+
+Blocos de código extraído do log:
+
+1º Exemplo:
+
+```json
+Unable to determine zone_id for wiserpv.com using zone names: ['wiserpv.com', 'com']. Please confirm that the domain name has been entered correctly and is already associated with the supplied Cloudflare account.
+```
+Se o log acima for apresentado, certifique-se que as chaves de acesso à Cloudflare e  AWS tem o devido acesso para manipular o domínio em questão (no caso acima nos referimos à 'wiserpv.com').
+
+2º Exemplo:
+
+O bloco de código abaixo mostra quais as secrets precisam ser atualizado logo em seguida.
+```json
+Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certificate', 'powerhouse.pro-certificate', 'wiser.cloud-certificate', 'wiseuplive.com.br-certificate']
+```
+Se ao final do log, algum dos domínios referentes as secrets que precisam ser atualizadas não informar que foi atualizado, significa que houve erro durante o processo de atualização e será necessário fazer uma análise mais detalhada dos logs para encontrar o ponto de falha.
+No bloco de código abaixo temos como exemplo o domínio numberone.com.br, que deveria ter sido atualizado, conforme o mostrado no código acima, mais não foi.
+
+```json
+[
+  {
+    "domain": "numberone.com.br",
+    "expiry_date": "2021-09-06T15:44:36",
+    "is_expired": false,
+    "5_days_or_less_to_expiry": false,
+    "was_cert_replaced": false,
+  }
+]
+```
+
+
 ### Métricas
 
 Métricas configuradas no GCP:
