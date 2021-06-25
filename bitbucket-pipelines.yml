@@ -4,7 +4,7 @@ options:
 
 pipelines:
   custom:
-    upgrade-proxy-to-test:
+    deploy-to-test:
       - step:
           image: gcr.io/google.com/cloudsdktool/cloud-sdk:338.0.0-alpine
           name: Deploy to GCP
