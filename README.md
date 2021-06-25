@@ -95,6 +95,16 @@ Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certifi
 
 Podemos ver no log acima quais secrets serão atualizadas por estar prestes a alcançar a data de expiração (faltando 20 dias ou menos).
 
+### Troubleshooting
+
+```json
+Unable to determine zone_id for wiserpv.com using zone names: ['wiserpv.com', 'com']. Please confirm that the domain name has been entered correctly and is already associated with the supplied Cloudflare account.
+```
+
+```json
+Secrets to be upgraded: ['wiseupcorp.com-certificate', 'numberone.com.br-certificate', 'powerhouse.pro-certificate', 'wiser.cloud-certificate', 'wiseuplive.com.br-certificate']
+```
+
 ### Métricas
 
 Métricas configuradas no GCP:
